@@ -10,7 +10,7 @@ package fileorganizationi;
  *
  * @author caolisheng
  */
-public interface IRecord extends ToWrite {
+public interface IRecord extends ToWrite, Comparable {
     
     public IKey getKey();
     
