@@ -38,6 +38,7 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("前后端通信规则配置生成器");
 
+        jTextField1.setEditable(false);
         jTextField1.setName("statebar"); // NOI18N
 
         jTextField2.setPreferredSize(new java.awt.Dimension(100, 21));
@@ -46,6 +47,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel2.setText("类型");
 
+        jComboBox1.setEditable(true);
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox1.setPreferredSize(new java.awt.Dimension(100, 21));
 
