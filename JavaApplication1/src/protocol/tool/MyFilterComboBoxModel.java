@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import util.Debugger;
 
 /**
  * @desc 带过滤功能的Model
@@ -32,17 +33,20 @@ public class MyFilterComboBoxModel extends DefaultComboBoxModel<String> implemen
 
     @Override
     public boolean filter(String perfix) {
-        super.setSelectedItem(null);
         super.removeAllElements();
         allElems.forEach((String elem) -> {
             if (elem.startsWith(perfix))
                 super.addElement(elem);
         });
+        super.setSelectedItem(null);
         return true;
     }
 
     @Override
     public void addElement(String anObject) {
+        Debugger.debug(() -> {
+            System.out.println("my add Element working.");
+        });
         if (-1 == super.getIndexOf(anObject)) {
             allElems.add(anObject);
             super.addElement(anObject);
