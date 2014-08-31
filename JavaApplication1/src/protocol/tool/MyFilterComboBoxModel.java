@@ -16,7 +16,7 @@ import util.Debugger;
  * @desc 带过滤功能的Model
  * @author caolisheng
  */
-public class MyFilterComboBoxModel extends DefaultComboBoxModel<String> implements IFilterComboBoxModel {
+public class MyFilterComboBoxModel extends DefaultComboBoxModel<String> implements IFilterComboBoxModel<String> {
 
     private final List<String> allElems;
     

@@ -7,7 +7,7 @@
 package util;
 
 /**
- *
+ * @desc 把一句if语句包装在一个类中，顺便用一下lambda表达式。
  * @author caolisheng
  */
 public class Debugger {

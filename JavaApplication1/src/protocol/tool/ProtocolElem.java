@@ -7,11 +7,11 @@
 package protocol.tool;
 
 /**
- *
+ * @desc 这是个实体类
  * @author caolisheng
  */
-public interface IFilterComboBoxModel<T> {
+public class ProtocolElem {
     
-    boolean filter(T perfix);
+    
     
 }

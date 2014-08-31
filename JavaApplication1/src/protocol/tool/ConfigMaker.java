@@ -6,7 +6,9 @@
 package protocol.tool;
 
 /**
- * @problems 1. 下拉菜单的绑定，最好能绑定到文件 2. 中间绘画面板的设计，想添加自定义的类
+ * @problems 如下
+ * @1. 下拉菜单的绑定，最好能绑定到文件（超额完成任务，还加上了过滤功能）
+ * @2. 中间绘画面板的设计，想添加自定义的类
  * @author caolisheng
  */
 public class ConfigMaker {
