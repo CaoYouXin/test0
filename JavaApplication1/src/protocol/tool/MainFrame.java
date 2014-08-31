@@ -48,7 +48,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel2.setText("类型");
 
         jComboBox1.setEditable(true);
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new MyFilterComboBoxModel(ComboElemPersistence.getComboData()));
         jComboBox1.setPreferredSize(new java.awt.Dimension(100, 21));
 
         jButton1.setText("追加");
@@ -113,6 +113,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
         // 绘画板内元素被按下的相应处理
+        
     }//GEN-LAST:event_jPanel1MousePressed
 
 	/**
