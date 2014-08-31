@@ -68,8 +68,8 @@ public class ComboElemPersistence {
     }
     
     public static void main(String[] args) {
-        ComboElemPersistence.addComboData("a");
-        ComboElemPersistence.addComboData("AB");
+        ComboElemPersistence.addComboData("az");
+        ComboElemPersistence.addComboData("AZ");
         System.err.print(Arrays.toString(ComboElemPersistence.getComboData().toArray()));
     }
     

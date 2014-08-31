@@ -17,7 +17,7 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class MyFilterComboBoxModel extends DefaultComboBoxModel<String> implements IFilterComboBoxModel {
 
-    private List<String> allElems;
+    private final List<String> allElems;
     
     public MyFilterComboBoxModel(String[] elems) {
         super(elems);
@@ -40,14 +40,14 @@ public class MyFilterComboBoxModel extends DefaultComboBoxModel<String> implemen
         });
         return true;
     }
-    
+
     @Override
     public void addElement(String anObject) {
         if (-1 == super.getIndexOf(anObject)) {
             allElems.add(anObject);
             super.addElement(anObject);
             if (!ComboElemPersistence.addComboData(anObject)) {
-                throw new ComboDataNotSyncException("combo data persistence faild");
+                throw new ComboDataNotSyncException("combo data persistence failed");
             }
         }
         super.setSelectedItem(anObject);

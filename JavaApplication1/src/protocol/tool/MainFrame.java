@@ -6,6 +6,12 @@
 
 package protocol.tool;
 
+import java.awt.event.KeyAdapter;
+import javax.swing.ComboBoxEditor;
+import javax.swing.JDialog;
+import util.CharUtils;
+import util.MessageBox;
+
 /**
  *
  * @author caolisheng
@@ -32,6 +38,11 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
+        jComboBox1.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jComboBox1KeyTyped(evt);
+            }
+        });
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
 
@@ -116,6 +127,22 @@ public class MainFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jPanel1MousePressed
 
+	private void jComboBox1KeyTyped(java.awt.event.KeyEvent evt) {                                    
+        // 为下拉菜单添加过滤功能
+		char c = evt.getKeyChar();
+		if (!CharUtils.isEnglishLetter(c)) {
+			MessageBox.showConfirmBox(this, "Error", "只能输入英文字母", () -> {
+				jComboBox1.getEditor().setItem(null);
+			});
+			return;
+		}
+		
+		String perfix = (String) jComboBox1.getEditor().getItem() + c;
+		IFilterComboBoxModel model = (IFilterComboBoxModel) jComboBox1.getModel();
+		model.filter(perfix);
+		jComboBox1.showPopup();
+    }
+	
 	/**
 	 * @param args the command line arguments
 	 */
@@ -127,7 +154,7 @@ public class MainFrame extends javax.swing.JFrame {
 		 */
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
+				if ("Windows".equals(info.getName())) {
 					javax.swing.UIManager.setLookAndFeel(info.getClassName());
 					break;
 				}
