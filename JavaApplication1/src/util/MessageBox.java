@@ -23,7 +23,6 @@ public class MessageBox {
     private static WindowAdapter wa = null;
 
     private static void commonSettings() {
-        dialog.pack();
         dialog.setAlwaysOnTop(true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         if (null != wa) {
@@ -32,6 +31,7 @@ public class MessageBox {
     }
 
     private static void commonShow() {
+        dialog.pack();
         dialog.addWindowListener(wa);
         dialog.setVisible(true);
     }
@@ -75,9 +75,9 @@ public class MessageBox {
 
         dialog.setTitle("Info");
 
-        JTextField jKey = new JTextField(10);
-        TypeComboBox jType;
-        jType = new TypeComboBox(p, (nowSelected) -> {
+        JTextField jKey = new JTextField(9);
+        jKey.setText(key);
+        TypeComboBox jType = new TypeComboBox(p, (nowSelected) -> {
             dialog.dispose();
             if (null != fn) {
                 fn.boxClosed(jKey.getText(), nowSelected);
@@ -86,7 +86,7 @@ public class MessageBox {
         });
 
         JPanel content = new JPanel(new FlowLayout());
-        content.setPreferredSize(new Dimension(100, 100));
+        content.setPreferredSize(new Dimension(300, 100));
         content.add(new JLabel("键"));
         content.add(jKey);
         content.add(new JLabel("类型"));

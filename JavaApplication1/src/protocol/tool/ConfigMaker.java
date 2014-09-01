@@ -12,12 +12,13 @@ package protocol.tool;
  * 
  * @exceptions 如下
  * @1. Java跨平台？狗屁！！！KeyReleased事件的触发时机不一样的好吧？！？
+ * @2. 不要告诉我Mac上没有mouseClickerd事件
  * @author caolisheng
  */
 public class ConfigMaker {
 
     public static void main(String[] args) {
-        MainFrame.main(args);
+        ManualMainFrame.main(args);
     }
 
 }

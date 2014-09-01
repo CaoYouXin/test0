@@ -6,7 +6,6 @@
 package protocol.tool;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.MutableComboBoxModel;
 import util.Debugger;
@@ -44,7 +43,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jPanel1.setLayout(new FlowLayout(0));
+        jPanel1.add(new JLabel("asdfsadfsadfasdfds"));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("前后端通信规则配置生成器");
@@ -132,18 +131,22 @@ public class MainFrame extends javax.swing.JFrame {
         MutableComboBoxModel model = (MutableComboBoxModel) jComboBox1.getModel();
         model.addElement(type);
         
-        jPanel1.add(new ProtocolElem(this, jTextField2.getText().trim(), ((String) jComboBox1.getSelectedItem()).trim()));
-        Debugger.debug(() -> {
-            Component[] comps = jPanel1.getComponents();
-            System.out.println("p size: " + comps.length);
-            System.out.println("c0 type: " + (comps.length > 0 ? comps[0].getClass() : String.class).getName());
-            
-        });
-        jPanel1.add(new JLabel("asdfsadfsadfasdfds"));
-        this.repaint();
+        ProtocolElem pe = new ProtocolElem(this, jTextField2.getText().trim(), ((String) jComboBox1.getSelectedItem()).trim());
+//        pe.setVisible(true);
+        jPanel1.add(pe);
+//        jPanel1.add(new JLabel("asdfsadfsadfasdfds"));
+//        this.repaint();
+        this.paintComponents(this.getGraphics());
 //        this.paintAll(this.getGraphics());
 //        this.setVisible(false);
 //        this.setVisible(true);
+        Debugger.debug(() -> {
+            Component[] comps = jPanel1.getComponents();
+            System.out.println(String.format("p size: %d, [%d, %d]", comps.length, jPanel1.getWidth(), jPanel1.getHeight()));
+            System.out.println("c0 type: " + (comps.length > 0 ? comps[0].getClass() : String.class).getName());
+            System.out.println(String.format("c0 size: [%d, %d]", comps[0].getWidth(), comps[0].getHeight()));
+            
+        });
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

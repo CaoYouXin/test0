@@ -113,7 +113,7 @@
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="jPanel1.setLayout(new FlowLayout(0));&#xd;&#xa;"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="jPanel1.add(new JLabel(&quot;asdfsadfsadfasdfds&quot;));"/>
       </AuxValues>
 
       <Layout>

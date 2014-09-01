@@ -20,6 +20,9 @@ import util.MessageBox;
 public class TypeComboBox extends JComboBox {
 
     public TypeComboBox(JFrame frame, EnterTyped fn) {
+        setEditable(true);
+        setModel(new MyFilterComboBoxModel(ComboElemPersistence.getComboData()));
+        setPreferredSize(new java.awt.Dimension(100, 21));
         getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
