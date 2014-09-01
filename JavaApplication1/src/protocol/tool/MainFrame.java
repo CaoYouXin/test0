@@ -5,6 +5,7 @@
  */
 package protocol.tool;
 
+import java.awt.FlowLayout;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -40,14 +41,12 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jComboBox1.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jComboBox1KeyReleased(evt);
-            }
+        jComboBox1 = new TypeComboBox(this, () -> {
+            jButton1ActionPerformed(null);
         });
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jPanel1.setLayout(new FlowLayout(0));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("前后端通信规则配置生成器");
@@ -147,42 +146,6 @@ public class MainFrame extends javax.swing.JFrame {
         model.addElement(type);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jComboBox1KeyReleased(java.awt.event.KeyEvent evt) {
-        // 为下拉菜单添加过滤功能
-        char c = evt.getKeyChar();
-        
-        Debugger.debug(() -> {
-            System.out.println("char: " + (int)c);
-        });
-        
-        if (65535 == c)
-            return;
-        
-        if (KeyEvent.VK_ENTER == c) {
-            jButton1ActionPerformed(null);
-            return;
-        }
-        
-        if (!CharUtils.isEnglishLetter(c) && KeyEvent.VK_BACK_SPACE != c) {
-            MessageBox.showConfirmBox(this, "Error", "只能输入英文字母", () -> {
-                jComboBox1.getEditor().setItem(null);
-            });
-            return;
-        }
-
-        String perfix = (String) jComboBox1.getEditor().getItem();
-        
-        Debugger.debug(() -> {
-            System.out.println("perfix: " + perfix);
-        });
-        
-        IFilterComboBoxModel model = (IFilterComboBoxModel) jComboBox1.getModel();
-        model.filter(perfix);
-        jComboBox1.hidePopup();
-        jComboBox1.showPopup();
-        jComboBox1.getEditor().setItem(perfix);
-    }
-
     /**
      * @param args the command line arguments
      */
@@ -211,11 +174,9 @@ public class MainFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrame().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> {
+			new MainFrame().setVisible(true);
+		});
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
