@@ -19,50 +19,50 @@ import util.MessageBox;
  */
 public class TypeComboBox extends JComboBox {
 
-	public TypeComboBox(JFrame frame, EnterTyped fn) {
-		getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(java.awt.event.KeyEvent evt) {
-				// 为下拉菜单添加过滤功能
-				char c = evt.getKeyChar();
+    public TypeComboBox(JFrame frame, EnterTyped fn) {
+        getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                // 为下拉菜单添加过滤功能
+                char c = evt.getKeyChar();
 
-				Debugger.debug(() -> {
-					System.out.println("char: " + (int) c);
-				});
+                Debugger.debug(() -> {
+                    System.out.println("char: " + (int) c);
+                });
 
-				if (65535 == c) {
-					return;
-				}
+                if (65535 == c) {
+                    return;
+                }
 
-				if (KeyEvent.VK_ENTER == c) {
-					fn.enter();
-					return;
-				}
+                if (KeyEvent.VK_ENTER == c && null != fn) {
+                    fn.enter((String) getSelectedItem());
+                    return;
+                }
 
-				if (!CharUtils.isEnglishLetter(c) && KeyEvent.VK_BACK_SPACE != c) {
-					MessageBox.showConfirmBox(frame, "Error", "只能输入英文字母", () -> {
-						getEditor().setItem(null);
-					});
-					return;
-				}
+                if (!CharUtils.isEnglishLetter(c) && KeyEvent.VK_BACK_SPACE != c) {
+                    MessageBox.showConfirmBox(frame, "Error", "只能输入英文字母", () -> {
+                        getEditor().setItem(null);
+                    });
+                    return;
+                }
 
-				String perfix = (String) getEditor().getItem();
+                String perfix = (String) getEditor().getItem();
 
-				Debugger.debug(() -> {
-					System.out.println("perfix: " + perfix);
-				});
+                Debugger.debug(() -> {
+                    System.out.println("perfix: " + perfix);
+                });
 
-				IFilterComboBoxModel model = (IFilterComboBoxModel) getModel();
-				model.filter(perfix);
-				hidePopup();
-				showPopup();
-				getEditor().setItem(perfix);
-			}
-		});
-	}
+                IFilterComboBoxModel model = (IFilterComboBoxModel) getModel();
+                model.filter(perfix);
+                hidePopup();
+                showPopup();
+                getEditor().setItem(perfix);
+            }
+        });
+    }
 
-	public interface EnterTyped {
-		void enter();
-	}
-	
+    public interface EnterTyped {
+        void enter(String nowSelected);
+    }
+
 }

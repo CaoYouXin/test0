@@ -5,12 +5,10 @@
  */
 package protocol.tool;
 
+import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import javax.swing.JLabel;
 import javax.swing.MutableComboBoxModel;
-import util.CharUtils;
 import util.Debugger;
 import util.MessageBox;
 import util.StringUtils;
@@ -41,7 +39,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new TypeComboBox(this, () -> {
+        jComboBox1 = new TypeComboBox(this, (nowSelected) -> {
             jButton1ActionPerformed(null);
         });
         jButton1 = new javax.swing.JButton();
@@ -68,12 +66,6 @@ public class MainFrame extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
-            }
-        });
-
-        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jPanel1MousePressed(evt);
             }
         });
 
@@ -129,11 +121,6 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
-        // 绘画板内元素被按下的相应处理
-
-    }//GEN-LAST:event_jPanel1MousePressed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // 追加一段协议内容
         String type = (String) jComboBox1.getEditor().getItem();
@@ -144,6 +131,19 @@ public class MainFrame extends javax.swing.JFrame {
         
         MutableComboBoxModel model = (MutableComboBoxModel) jComboBox1.getModel();
         model.addElement(type);
+        
+        jPanel1.add(new ProtocolElem(this, jTextField2.getText().trim(), ((String) jComboBox1.getSelectedItem()).trim()));
+        Debugger.debug(() -> {
+            Component[] comps = jPanel1.getComponents();
+            System.out.println("p size: " + comps.length);
+            System.out.println("c0 type: " + (comps.length > 0 ? comps[0].getClass() : String.class).getName());
+            
+        });
+        jPanel1.add(new JLabel("asdfsadfsadfasdfds"));
+        this.repaint();
+//        this.paintAll(this.getGraphics());
+//        this.setVisible(false);
+//        this.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

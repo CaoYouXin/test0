@@ -100,7 +100,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new TypeComboBox(this, () -&gt; {&#xd;&#xa;&#x9;jButton1ActionPerformed(null);&#xd;&#xa;});"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new TypeComboBox(this, (nowSelected) -&gt; {&#xd;&#xa;&#x9;jButton1ActionPerformed(null);&#xd;&#xa;});"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">
@@ -112,9 +112,6 @@
       </Events>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel1">
-      <Events>
-        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jPanel1MousePressed"/>
-      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="jPanel1.setLayout(new FlowLayout(0));&#xd;&#xa;"/>
       </AuxValues>

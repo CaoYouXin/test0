@@ -6,9 +6,11 @@
 package util;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
+import protocol.tool.TypeComboBox;
 
 /**
  * @desc 这个类是单线程的。为了防止同一时间弹出多个相同的对话框，JDialog对象是单例的，只是会替换若干次内容面板。
@@ -20,81 +22,95 @@ public class MessageBox {
     private static final JDialog dialog = new JDialog();
     private static WindowAdapter wa = null;
 
-	private static void commonSettings() {
+    private static void commonSettings() {
         dialog.pack();
         dialog.setAlwaysOnTop(true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         if (null != wa) {
             dialog.removeWindowListener(wa);
         }
-	}
-	
-	private static void commonShow() {
+    }
+
+    private static void commonShow() {
         dialog.addWindowListener(wa);
         dialog.setVisible(true);
-	}
-	
-    public static void showConfirmBox(JFrame p, String title, String message, BoxClosed fn) {
-		commonSettings();
-        
-		p.setVisible(false);
+    }
 
-		dialog.setTitle(title);
-		
+    public static void showConfirmBox(JFrame p, String title, String message, BoxClosed fn) {
+        commonSettings();
+
+        p.setVisible(false);
+
+        dialog.setTitle(title);
+
         JPanel content = new JPanel();
         content.setPreferredSize(new Dimension(300, 100));
         content.add(new JLabel(message));
-		dialog.setContentPane(content);
-        
+        dialog.setContentPane(content);
+
         wa = new WindowAdapter() {
 
             @Override
             public void windowClosed(WindowEvent e) {
-                if (null != fn)
+                if (null != fn) {
                     fn.boxClosed();
+                }
                 p.setVisible(true);
             }
 
         };
-		
-		commonShow();
+
+        commonShow();
     }
 
     public interface BoxClosed {
+
         void boxClosed();
     }
 
-	public static void showPEInfoBox(JFrame p, String key, String type, BoxClosed2 fn) {
-		commonSettings();
-        
-		p.setVisible(false);
+    public static void showPEInfoBox(JFrame p, String key, String type, BoxClosed2 fn) {
+        commonSettings();
 
-		dialog.setTitle("Info");
-		
-		JTextField jKey = new JTextField(10);
-		JComboBox jType = new JComboBox();
-		
-        JPanel content = new JPanel();
+        p.setVisible(false);
+
+        dialog.setTitle("Info");
+
+        JTextField jKey = new JTextField(10);
+        TypeComboBox jType;
+        jType = new TypeComboBox(p, (nowSelected) -> {
+            dialog.dispose();
+            if (null != fn) {
+                fn.boxClosed(jKey.getText(), nowSelected);
+            }
+            p.setVisible(true);
+        });
+
+        JPanel content = new JPanel(new FlowLayout());
         content.setPreferredSize(new Dimension(100, 100));
-        
-		dialog.setContentPane(content);
-        
+        content.add(new JLabel("键"));
+        content.add(jKey);
+        content.add(new JLabel("类型"));
+        content.add(jType);
+        dialog.setContentPane(content);
+
         wa = new WindowAdapter() {
 
             @Override
             public void windowClosed(WindowEvent e) {
-                if (null != fn)
+                if (null != fn) {
                     fn.boxClosed(jKey.getText(), (String) jType.getSelectedItem());
+                }
                 p.setVisible(true);
             }
 
         };
-		
-		commonShow();
-	}
-	
-	public interface BoxClosed2 {
-		void boxClosed(String newKey, String newType);
-	}
-	
+
+        commonShow();
+    }
+
+    public interface BoxClosed2 {
+
+        void boxClosed(String newKey, String newType);
+    }
+
 }
