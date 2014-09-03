@@ -8,37 +8,34 @@ package protocol.tool;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import util.Debugger;
-import util.MessageBox;
 import util.StringUtils;
 
 /**
  * @desc 这是个自定义的可视化组件
  * @author caolisheng
  */
-public class ProtocolElem extends JButton {
+public final class ProtocolElem extends JButton {
 
     private static final int sHeight = 15;
 
+    private ProtocolElem thisPE = this;
+    
+    private String id;
     private String key;
     private String type;
 
     public ProtocolElem(JFrame frame, String key, String type) {
-        super(key);
+//        this.id = 
+        this.setText(key);
         this.setSize(type);
-        this.addMouseListener(new MouseListener(){
-            
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                
-            }
+        this.addMouseListener(new MouseAdapter(){
             
             private void button1Clicked() {
-                MessageBox.showPEInfoBox(frame, key, type, (String newKey, String newType) -> {
+                MessageBox.showPEInfoBox(frame, thisPE.key, thisPE.type, (String newKey, String newType) -> {
                     if (StringUtils.isEmpty(newKey)) {
                         MessageBox.showConfirmBox(frame, "Error", "键不能为空", null);
                         return;
@@ -49,15 +46,14 @@ public class ProtocolElem extends JButton {
                         return;
                     }
 
-                    ProtocolElem.this.setText(newKey);
-                    ProtocolElem.this.setSize(newType);
+                    thisPE.setText(newKey);
+                    thisPE.setSize(newType);
                     frame.repaint();
                 });
             }
 
             private void button2Clicked() {
-                ProtocolElem pe = ProtocolElem.this;
-                pe.getParent().remove(pe);
+                thisPE.getParent().remove(thisPE);
                 frame.paintComponents(frame.getGraphics());
             }
 
@@ -78,21 +74,15 @@ public class ProtocolElem extends JButton {
                 }
             }
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-            
         });
     }
 
+    @Override
+    public void setText(String key) {
+        this.key = key;
+        super.setText(key);
+    }
+    
     private void setSize(String type) {
         this.type = type;
         this.setPreferredSize(new Dimension(getSize(type), sHeight));
@@ -108,7 +98,7 @@ public class ProtocolElem extends JButton {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 19 * hash + Objects.hashCode(this.key);
+        hash = 19 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -121,10 +111,7 @@ public class ProtocolElem extends JButton {
             return false;
         }
         final ProtocolElem other = (ProtocolElem) obj;
-        if (!Objects.equals(this.key, other.key)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     private enum TypeSize {

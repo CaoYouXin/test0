@@ -9,7 +9,6 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.MutableComboBoxModel;
 import util.Debugger;
-import util.MessageBox;
 import util.StringUtils;
 
 /**

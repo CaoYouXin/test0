@@ -11,7 +11,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import util.CharUtils;
 import util.Debugger;
-import util.MessageBox;
 
 /**
  *

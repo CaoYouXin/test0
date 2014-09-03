@@ -16,4 +16,12 @@ public class StringUtils {
         return null == str || str.isEmpty();
     }
     
+    public static boolean isEnglish(String str) {
+        for (char c : str.toCharArray()) {
+            if (!CharUtils.isEnglishLetter(c))
+                return false;
+        }
+        return true;
+    }
+    
 }

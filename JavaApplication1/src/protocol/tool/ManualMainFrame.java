@@ -13,7 +13,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.*;
 import util.Debugger;
-import util.MessageBox;
 import util.StringUtils;
 
 /**
@@ -23,6 +22,7 @@ import util.StringUtils;
 public class ManualMainFrame extends JFrame {
 
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -45,6 +45,7 @@ public class ManualMainFrame extends JFrame {
             jButton1ActionPerformed(null);
         });
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel(new FlowLayout(FlowLayout.LEFT, 0, 10));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -53,7 +54,9 @@ public class ManualMainFrame extends JFrame {
         jTextField1.setEditable(false);
         jTextField1.setName("statebar"); // NOI18N
 
-        jTextField2.setPreferredSize(new java.awt.Dimension(100, 21));
+        jTextField2.setPreferredSize(new java.awt.Dimension(200, 21));
+        
+        jComboBox1.setPreferredSize(new java.awt.Dimension(200, 21));
 
         jLabel1.setText("键");
 
@@ -63,11 +66,15 @@ public class ManualMainFrame extends JFrame {
         jButton1.addActionListener((java.awt.event.ActionEvent evt) -> {
             jButton1ActionPerformed(evt);
         });
+        
+        jButton2.setText("生成");
+        jButton2.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jButton2ActionPerformed(evt);
+        });
 
         JPanel content = new JPanel(new BorderLayout());
         this.setContentPane(content);
 
-        content.add(jTextField1, SOUTH);
         content.add(jPanel1, CENTER);
 
         JPanel north = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -78,6 +85,12 @@ public class ManualMainFrame extends JFrame {
         north.add(jLabel2);
         north.add(jComboBox1);
         north.add(jButton1);
+        
+        JPanel south = new JPanel(new BorderLayout());
+        content.add(south, SOUTH);
+        
+        south.add(jTextField1, CENTER);
+        south.add(jButton2, EAST);
 
         pack();
     }
@@ -87,6 +100,11 @@ public class ManualMainFrame extends JFrame {
         String key = jTextField2.getText().trim();
         if (StringUtils.isEmpty(key)) {
             MessageBox.showConfirmBox(this, "Error", "键不能为空", null);
+            return;
+        }
+        
+        if (!StringUtils.isEnglish(key)) {
+            MessageBox.showConfirmBox(this, "Error", "键必须由英文字母组成", null);
             return;
         }
         
@@ -107,6 +125,11 @@ public class ManualMainFrame extends JFrame {
             System.out.println("c0 type: " + (comps.length > 0 ? comps[0].getClass() : String.class).getName());
             System.out.println(String.format("c0 size: [%d, %d]", comps[0].getWidth(), comps[0].getHeight()));
         });
+    }
+    
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+        // 先选模版，然后生成（另建立一个JFrame吧
+        
     }
 
     public static void main(String args[]) {
