@@ -38,7 +38,10 @@ public class MyFilterComboBoxModel extends DefaultComboBoxModel<String> implemen
             if (elem.startsWith(perfix))
                 super.addElement(elem);
         });
-        super.setSelectedItem(null);
+		Debugger.debug(() -> {
+			System.out.println("selected: " + super.getSelectedItem());
+		});
+//        super.setSelectedItem(null);
         return true;
     }
 

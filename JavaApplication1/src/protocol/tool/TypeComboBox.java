@@ -5,10 +5,14 @@
  */
 package protocol.tool;
 
+import java.awt.Component;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.text.JTextComponent;
 import util.CharUtils;
 import util.Debugger;
 
@@ -23,7 +27,7 @@ public class TypeComboBox extends JComboBox {
         setModel(new MyFilterComboBoxModel(ComboElemPersistence.getComboData()));
         setPreferredSize(new java.awt.Dimension(100, 21));
         getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-            @Override
+			@Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 // 为下拉菜单添加过滤功能
                 char c = evt.getKeyChar();
@@ -55,12 +59,25 @@ public class TypeComboBox extends JComboBox {
                 });
 
                 IFilterComboBoxModel model = (IFilterComboBoxModel) getModel();
-                model.filter(perfix);
                 hidePopup();
+                model.filter(perfix);
                 showPopup();
                 getEditor().setItem(perfix);
+				Component editor = getEditor().getEditorComponent();
+				if (editor instanceof JTextComponent) {
+					JTextComponent jtc = (JTextComponent) editor;
+					jtc.setSelectionStart(jtc.getText().length());
+				}
             }
         });
+//		getEditor().getEditorComponent().addFocusListener(new FocusAdapter() {
+//			@Override
+//			public void focusGained(FocusEvent e) {
+//				Debugger.debug(() -> {
+//					System.out.println("focus on " + e.getSource().getClass().getName());
+//				});
+//			}
+//		});
     }
 
     public interface EnterTyped {

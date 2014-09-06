@@ -6,6 +6,8 @@
 
 package protocol.business;
 
+import protocol.coding.NoConfigException;
+
 /**
  * @desc 业务上，网络数据都是如何被访问和生成的呢？
  * 1. 键值对，底层与2是一致的，只不过是一种用时空换来了更好的访问方式。如果2的过程可以自动化
@@ -17,6 +19,6 @@ public interface IData4Bizz {
 	
 	Object get(String key);
 	
-	void set(String key, Object value) throws DataWrongTypeException;
+	void set(String key, Object value) throws DataWrongTypeException, NoConfigException;
 	
 }

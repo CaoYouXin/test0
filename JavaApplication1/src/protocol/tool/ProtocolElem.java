@@ -31,7 +31,7 @@ public final class ProtocolElem extends JButton {
     public ProtocolElem(JFrame frame, String key, String type) {
         this.id = StringUtils.Md5("" + System.nanoTime());
 		
-        this.setText(key);
+        this.setText(key, type);
         this.setSize(type);
         this.addMouseListener(new MouseAdapter(){
             
@@ -47,7 +47,11 @@ public final class ProtocolElem extends JButton {
                         return;
                     }
 
-                    thisPE.setText(newKey);
+					Debugger.debug(() -> {
+						System.out.println(String.format("%s:%s vs. %s:%s", thisPE.key, thisPE.type, newKey, newType));
+					});
+					
+                    thisPE.setText(newKey, newType);
                     thisPE.setSize(newType);
                     frame.repaint();
                 });
@@ -78,15 +82,14 @@ public final class ProtocolElem extends JButton {
         });
     }
 
-    @Override
-    public void setText(String key) {
+    private void setText(String key, String type) {
         this.key = key;
-        super.setText(key);
+        this.setText(String.format("[%s/%s]", key, type));
     }
     
     private void setSize(String type) {
         this.type = type;
-        this.setPreferredSize(new Dimension(getSize(type), sHeight));
+		this.setPreferredSize(new Dimension(getSize(type), sHeight));
         Debugger.debug(() -> {
             System.out.println("button size set.");
         });

@@ -11,8 +11,8 @@ package protocol.tool;
  * @2. 中间绘画面板的设计，想添加自定义的类
  * 
  * @exceptions 如下
- * @1. Java跨平台？狗屁！！！KeyReleased事件的触发时机不一样的好吧？！？
- * @2. 不要告诉我Mac上没有mouseClickerd事件
+ * @1. Java跨平台？狗屁！！！KeyReleased事件的触发时机不一样的好吧？！？（误会了）
+ * @2. 不要告诉我Mac上没有mouseClickerd事件（这个还真没发现）
  * @author caolisheng
  */
 public class ConfigMaker {
