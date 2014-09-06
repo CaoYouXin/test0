@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import util.Debugger;
 import util.StringUtils;
+import util.TypeSize;
 
 /**
  * @desc 这是个自定义的可视化组件
@@ -96,7 +97,7 @@ public final class ProtocolElem extends JButton {
     }
 
     private int getSize(String type) {
-        return TypeSize.val(type).size;
+        return TypeSize.val(type).size();
     }
 
     @Override
@@ -116,36 +117,6 @@ public final class ProtocolElem extends JButton {
         }
         final ProtocolElem other = (ProtocolElem) obj;
         return Objects.equals(this.id, other.id);
-    }
-
-    private enum TypeSize {
-
-        Boolean(20),
-        Byte(20),
-        Char(40),
-        Short(40),
-        Integer(80),
-        Long(120),
-        Float(80),
-        Double(120),
-        Other(150);
-
-        private int size;
-
-        private TypeSize(int size) {
-            this.size = size;
-        }
-
-        public static TypeSize val(String type) {
-            for (TypeSize ats : TypeSize.values()) {
-                String aname = ats.name();
-                if (aname.equalsIgnoreCase(type)) {
-                    return ats;
-                }
-            }
-            return Other;
-        }
-
     }
 
 }

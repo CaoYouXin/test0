@@ -6,6 +6,8 @@
 
 package protocol.spi.coding;
 
+import protocol.spi.exceptions.NoConfigException;
+
 /**
  * @desc 编码规则。额，这个属于表示层？？？
  * @author caolisheng
@@ -14,6 +16,6 @@ public interface ICoding {
     
     IData4Coding decoding(byte[] data);
     
-    byte[] encoding(IData4Coding data);
+    byte[] encoding(IData4Coding data) throws NoConfigException;
     
 }
