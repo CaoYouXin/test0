@@ -8,8 +8,11 @@ package protocol.business;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,29 +28,44 @@ public class Data implements IData4Bizz, IData4Coding {
 	private String configPath;
 	private boolean configed = false;
 	private Map<Class, List<String>> config;
+	private Map<String, Object> data;
 
 	public Data(String configPath) {
 		this.configPath = configPath;
+		this.data = new HashMap<>();
 	}
 	
 	@Override
 	public Object get(String key) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return this.data.get(key);
 	}
 
 	@Override
-	public void set(String key, Object value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public void set(String key, Object value) throws DataWrongTypeException, NoConfigException {
+		if (null == value)
+			return;
+		List<String> keys = this.config(value.getClass());
+		if (!keys.contains(key))
+			throw new DataWrongTypeException(String.format("%s got the wrong type[%s].", key, value.getClass().getName()));
+		this.data.put(key, value);
 	}
 
 	@Override
-	public <T> List<T> query(Class<T> clazz) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public <T> List<T> query(Class<T> clazz) throws NoConfigException {
+		List<T> ret = new ArrayList<>();
+		List<String> keys = this.config(clazz);
+		keys.forEach((key) -> {
+			Object value = this.data.get(key);
+			ret.add((T) value);
+		});
+		return ret;
 	}
 
 	@Override
-	public <T> void add(Map<String, T> data) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public <T> void add(Map<String, T> data) throws DataWrongTypeException, NoConfigException {
+		for (Entry<String, T> entry : data.entrySet()) {
+			this.set(entry.getKey(), entry.getValue());
+		}
 	}
 
 	@Override

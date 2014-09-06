@@ -8,6 +8,7 @@ package protocol.coding;
 
 import java.util.List;
 import java.util.Map;
+import protocol.business.DataWrongTypeException;
 
 /**
  * @desc 为了方便编码，数据类应该具有什么样的接口呢？
@@ -18,8 +19,8 @@ import java.util.Map;
  */
 public interface IData4Coding {
 	
-	<T> List<T> query(Class<T> clazz);
-	<T> void add(Map<String, T> data);
+	<T> List<T> query(Class<T> clazz) throws NoConfigException;
+	<T> void add(Map<String, T> data) throws DataWrongTypeException, NoConfigException;
 	
 	<T> List<String> config(Class<T> clazz) throws NoConfigException;
 	

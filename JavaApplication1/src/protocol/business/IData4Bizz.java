@@ -17,6 +17,6 @@ public interface IData4Bizz {
 	
 	Object get(String key);
 	
-	void set(String key, Object value);
+	void set(String key, Object value) throws DataWrongTypeException;
 	
 }
