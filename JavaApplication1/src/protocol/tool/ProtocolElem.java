@@ -29,7 +29,8 @@ public final class ProtocolElem extends JButton {
     private String type;
 
     public ProtocolElem(JFrame frame, String key, String type) {
-//        this.id = 
+        this.id = StringUtils.Md5("" + System.nanoTime());
+		
         this.setText(key);
         this.setSize(type);
         this.addMouseListener(new MouseAdapter(){
