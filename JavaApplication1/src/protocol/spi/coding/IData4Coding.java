@@ -4,11 +4,12 @@
  * and open the template in the editor.
  */
 
-package protocol.coding;
+package protocol.spi.coding;
 
+import protocol.spi.exceptions.NoConfigException;
 import java.util.List;
 import java.util.Map;
-import protocol.business.DataWrongTypeException;
+import protocol.spi.exceptions.DataWrongTypeException;
 
 /**
  * @desc 为了方便编码，数据类应该具有什么样的接口呢？
@@ -20,8 +21,11 @@ import protocol.business.DataWrongTypeException;
 public interface IData4Coding {
 	
 	<T> List<T> query(Class<T> clazz) throws NoConfigException;
+        
 	<T> void add(Map<String, T> data) throws DataWrongTypeException, NoConfigException;
 	
 	<T> List<String> config(Class<T> clazz) throws NoConfigException;
+        
+        List<Class> allConfigs();
 	
 }

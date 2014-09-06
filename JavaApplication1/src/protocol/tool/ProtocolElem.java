@@ -23,18 +23,18 @@ public final class ProtocolElem extends JButton {
     private static final int sHeight = 15;
 
     private ProtocolElem thisPE = this;
-    
+
     private String id;
     private String key;
     private String type;
 
     public ProtocolElem(JFrame frame, String key, String type) {
         this.id = StringUtils.Md5("" + System.nanoTime());
-		
+
         this.setText(key, type);
         this.setSize(type);
-        this.addMouseListener(new MouseAdapter(){
-            
+        this.addMouseListener(new MouseAdapter() {
+
             private void button1Clicked() {
                 MessageBox.showPEInfoBox(frame, thisPE.key, thisPE.type, (String newKey, String newType) -> {
                     if (StringUtils.isEmpty(newKey)) {
@@ -47,10 +47,10 @@ public final class ProtocolElem extends JButton {
                         return;
                     }
 
-					Debugger.debug(() -> {
-						System.out.println(String.format("%s:%s vs. %s:%s", thisPE.key, thisPE.type, newKey, newType));
-					});
-					
+                    Debugger.debug(() -> {
+                        System.out.println(String.format("%s:%s vs. %s:%s", thisPE.key, thisPE.type, newKey, newType));
+                    });
+
                     thisPE.setText(newKey, newType);
                     thisPE.setSize(newType);
                     frame.repaint();
@@ -86,10 +86,10 @@ public final class ProtocolElem extends JButton {
         this.key = key;
         this.setText(String.format("[%s/%s]", key, type));
     }
-    
+
     private void setSize(String type) {
         this.type = type;
-		this.setPreferredSize(new Dimension(getSize(type), sHeight));
+        this.setPreferredSize(new Dimension(getSize(type), sHeight));
         Debugger.debug(() -> {
             System.out.println("button size set.");
         });
@@ -98,7 +98,7 @@ public final class ProtocolElem extends JButton {
     private int getSize(String type) {
         return TypeSize.val(type).size;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -119,7 +119,7 @@ public final class ProtocolElem extends JButton {
     }
 
     private enum TypeSize {
-        
+
         Boolean(20),
         Byte(20),
         Char(40),
@@ -129,22 +129,23 @@ public final class ProtocolElem extends JButton {
         Float(80),
         Double(120),
         Other(150);
-            
+
         private int size;
-        
+
         private TypeSize(int size) {
             this.size = size;
         }
-        
+
         public static TypeSize val(String type) {
-            for(TypeSize ats : TypeSize.values()) {
+            for (TypeSize ats : TypeSize.values()) {
                 String aname = ats.name();
-                if (aname.equalsIgnoreCase(type))
+                if (aname.equalsIgnoreCase(type)) {
                     return ats;
+                }
             }
             return Other;
         }
-        
+
     }
-    
+
 }

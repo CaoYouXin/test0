@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package protocol.business;
+package protocol.spi.exceptions;
 
 /**
  *

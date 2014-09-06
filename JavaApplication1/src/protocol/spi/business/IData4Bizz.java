@@ -4,9 +4,10 @@
  * and open the template in the editor.
  */
 
-package protocol.business;
+package protocol.spi.business;
 
-import protocol.coding.NoConfigException;
+import protocol.spi.exceptions.DataWrongTypeException;
+import protocol.spi.exceptions.NoConfigException;
 
 /**
  * @desc 业务上，网络数据都是如何被访问和生成的呢？
