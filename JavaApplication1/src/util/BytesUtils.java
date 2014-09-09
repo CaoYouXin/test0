@@ -51,12 +51,27 @@ public class BytesUtils {
         return new byte[]{ b };
     }
 
+    private static int decodeByte(byte b) {
+    	return (b < 0) ? (b & ((1 << 8) - 1)) | (1 << 7) : b;
+    }
+    
     public static short decodeShort(byte[] data, Offset offset) {
-        return 0;
+    	int high = decodeByte(data[offset.forwardROld(1)]);
+    	int low = decodeByte(data[offset.forwardROld(1)]);
+//    	Debugger.debug(() -> {
+//    		System.out.println(String.format("data = %s, (high << 8) = %d", Arrays.toString(data)
+//    				, (high << 8)));
+//    	});
+        return (short) ((high << 8) | low);
     }
     
     public static byte[] encodeShort(short s) {
-        return new byte[0];
+    	int high = s >> 8;
+    	int low = s & ((1 << 8) - 1);
+//    	Debugger.debug(() -> {
+//    		System.out.println(String.format("s = %d, high = %d, low = %d", s, high, low));
+//    	});
+        return new byte[]{ (byte) high, (byte) low };
     }
     
     ////////////////////////////////////////////////////////////////////////////
