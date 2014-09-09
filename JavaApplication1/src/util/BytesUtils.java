@@ -34,7 +34,31 @@ public class BytesUtils {
         }
         return null;
     }
+    
+    public static boolean decodeBoolean(byte[] data, Offset offset) {
+        return 1 == data[offset.forwardROld(1)];
+    }
+    
+    public static byte[] encodeBoolean(boolean b) {
+        return new byte[]{ b ? (byte) 1 : (byte) 0 };
+    }
+    
+    public static byte decodeByte(byte[] data, Offset offset) {
+        return data[offset.forwardROld(1)];
+    }
+    
+    public static byte[] encodeByte(byte b) {
+        return new byte[]{ b };
+    }
 
+    public static short decodeShort(byte[] data, Offset offset) {
+        return 0;
+    }
+    
+    public static byte[] encodeShort(short s) {
+        return new byte[0];
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     
     public static class Offset {
