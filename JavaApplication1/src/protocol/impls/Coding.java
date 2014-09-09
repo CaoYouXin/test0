@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package protocol.impls;
 
 import java.util.Collections;
@@ -32,14 +31,14 @@ public class Coding implements ICoding {
     }
 
     /**
-      * @desc 其实就是加上文件夹的路径
-      * @param configFile
-      * @return 
-      */
+     * @desc 其实就是加上文件夹的路径
+     * @param configFile
+     * @return
+     */
     private String getConfigPath(String configFile) {
         return configFile;
     }
-    
+
     @Override
     public byte[] encoding(IData4Coding data) throws NoConfigException {
         Bytes encodedData = new Bytes();
@@ -59,29 +58,29 @@ public class Coding implements ICoding {
      * @1. 这里可能有该死的递归
      * @2. 移位操作还有待验证啊
      * @param value
-     * @return 
+     * @return
      */
     private byte[] toBytes(Object value) {
         if (value instanceof Boolean) {
-            return new byte[]{ ((Boolean) value) ? (byte) 1 : (byte) 0 };
+            return BytesUtils.encodeBoolean((boolean) value);
         } else if (value instanceof Byte) {
-            return new byte[]{ (byte) value };
+            return BytesUtils.encodeByte((byte) value);
         } else if (value instanceof Short) {
-            return new byte[]{ (byte) ((short) value >>> 8), (byte) ((short) value / (1 << 8)) };
+            return new byte[]{(byte) ((short) value >>> 8), (byte) ((short) value / (1 << 8))};
         }
         return new byte[0];
     }
-    
+
     /**
      * @desc 占空间小的基本类型排在前面
-     * @param allTyps 
+     * @param allTyps
      */
     private void sortBySize(List<Class> allTyps) {
         Collections.sort(allTyps, (c1, c2) -> {
             return TypeSize.val(c1.getSimpleName()).size() - TypeSize.val(c2.getSimpleName()).size();
         });
     }
-    
+
 //    public static void main(String[] args) {
 ////        List<Integer> list = new ArrayList<>();
 ////        list.add(2);
@@ -99,6 +98,9 @@ public class Coding implements ICoding {
 ////        int i = 0;
 ////        Object o = i;
 ////        System.out.println(o instanceof Integer);
+//        
+////        int i2 = Short.MIN_VALUE - 1;
+////        short s = (short) i2;
+////        System.out.println(s + " vs. " + Short.MAX_VALUE);
 //    }
-    
 }
