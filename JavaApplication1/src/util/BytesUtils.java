@@ -51,7 +51,7 @@ public class BytesUtils {
     public static byte[] encodeByte(byte b) {
         return new byte[]{ b };
     }
-
+    
     private static int decodeByte(byte b) {
     	return (b < 0) ? (b & ((1 << 8) - 1)) | (1 << 7) : b;
     }
@@ -72,6 +72,14 @@ public class BytesUtils {
     		System.out.println(String.format("s = %d, high = %d, low = %d", s, high, low));
     	});
         return new byte[]{ (byte) high, (byte) low };
+    }
+
+    public static char decodeChar(byte[] data, Offset offset) {
+    	return (char) decodeShort(data, offset);
+    }
+    
+    public static byte[] encodeChar(char c) {
+    	return encodeShort((short) c);
     }
     
     ////////////////////////////////////////////////////////////////////////////
