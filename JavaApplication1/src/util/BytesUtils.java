@@ -6,6 +6,7 @@
 package util;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,19 +59,18 @@ public class BytesUtils {
     public static short decodeShort(byte[] data, Offset offset) {
     	int high = decodeByte(data[offset.forwardROld(1)]);
     	int low = decodeByte(data[offset.forwardROld(1)]);
-//    	Debugger.debug(() -> {
-//    		System.out.println(String.format("data = %s, (high << 8) = %d", Arrays.toString(data)
-//    				, (high << 8)));
-//    	});
+    	Debugger.debug(BytesUtils.class, () -> {
+    		System.out.println(String.format("data = %s, (high << 8) = %d", Arrays.toString(data), (high << 8)));
+    	});
         return (short) ((high << 8) | low);
     }
     
     public static byte[] encodeShort(short s) {
     	int high = s >> 8;
     	int low = s & ((1 << 8) - 1);
-//    	Debugger.debug(() -> {
-//    		System.out.println(String.format("s = %d, high = %d, low = %d", s, high, low));
-//    	});
+    	Debugger.debug(BytesUtils.class, () -> {
+    		System.out.println(String.format("s = %d, high = %d, low = %d", s, high, low));
+    	});
         return new byte[]{ (byte) high, (byte) low };
     }
     
