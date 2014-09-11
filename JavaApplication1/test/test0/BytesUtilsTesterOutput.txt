@@ -1,0 +1,3 @@
+testShortCoding cost 0.060295s.
+Fuck Stoping.
+testIntCoding cost 126.195957s.

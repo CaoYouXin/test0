@@ -65,9 +65,11 @@ public class BytesUtils {
         return (short) ((high << 8) | low);
     }
     
+    private static final int R0 = (1 << 8) - 1;
+    
     public static byte[] encodeShort(short s) {
     	int high = s >> 8;
-    	int low = s & ((1 << 8) - 1);
+		int low = s & R0;
     	Debugger.debug(BytesUtils.class, () -> {
     		System.out.println(String.format("s = %d, high = %d, low = %d", s, high, low));
     	});
@@ -80,6 +82,25 @@ public class BytesUtils {
     
     public static byte[] encodeChar(char c) {
     	return encodeShort((short) c);
+    }
+    
+    public static int decodeInt(byte[] data, Offset offset) {
+    	int l0 = decodeByte(data[offset.forwardROld(1)]);
+    	int l1 = decodeByte(data[offset.forwardROld(1)]);
+    	int l2 = decodeByte(data[offset.forwardROld(1)]);
+    	int l3 = decodeByte(data[offset.forwardROld(1)]);
+    	return (l0 << 24) | (l1 << 16) | (l2 << 8) | l3;
+    }
+
+    private static final int R1 = R0 << 8;
+    private static final int R2 = R1 << 8;
+    
+    public static byte[] encodeInt(int i) {
+    	int l0 = i >> 24;
+    	int l1 = (i & R2) >> 16;
+    	int l2 = (i & R1) >> 8;
+    	int l3 = i & R0;
+    	return new byte[]{ (byte) l0, (byte) l1, (byte) l2, (byte) l3 };
     }
     
     ////////////////////////////////////////////////////////////////////////////
