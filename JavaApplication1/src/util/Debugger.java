@@ -46,11 +46,36 @@ public class Debugger {
 		void doATC(long cost);
 	}
 	
-	public static void timeCounting(DoSth doSth, AfterTimeCounting doATC) {
+	/**
+	 * time counting
+	 * @param doSth
+	 * @param doATC
+	 */
+	public static void tc(DoSth doSth, AfterTimeCounting doATC) {
 		long start = System.nanoTime();
 		doSth.doSth();
 		long cost = System.nanoTime() - start;
 		doATC.doATC(cost);
+	}
+	
+	public interface ATCEnhanced {
+		void doATC(long[] costs);
+	}
+	
+	public static void tcEnhanced(ATCEnhanced doATC, DoSth... doSths) {
+		tcEnhanced(doSths, doATC);
+	}
+	
+	public static void tcEnhanced(DoSth[] doSths, ATCEnhanced doATC) {
+		long[] costs = new long[doSths.length];
+		long start;
+		int i = 0;
+		for (DoSth doSth : doSths) {
+			start = System.nanoTime();
+			doSth.doSth();
+			costs[i++] = System.nanoTime() - start;
+		}
+		doATC.doATC(costs);
 	}
 	
 }

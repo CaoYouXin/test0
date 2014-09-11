@@ -1,26 +1,24 @@
 package test0;
 
-import static org.junit.Assert.*;
-
 import java.util.Arrays;
 
 import org.junit.Test;
 
 import util.BytesUtils;
-import util.Debugger;
 import util.BytesUtils.Offset;
+import util.Debugger;
 
 /**
- * Created by caolisheng on 2014/9/11 011.
+ * 
+ * @author caolisheng
  */
 public class BytesUtilsTester {
 
 	@Test
-	public void testShort() {
-		Debugger.timeCounting(() -> {
+	public void testShortCoding() {
+		Debugger.tc(() -> {
 			byte[] buf = null;
 			for (int s = Short.MIN_VALUE; s <= Short.MAX_VALUE; s++) {
-//		for (int s = -10; s <= 10; s++) {
 				buf = BytesUtils.encodeShort((short) s);
 				short bs = BytesUtils.decodeShort(buf, new Offset());
 				if (bs != s) {
@@ -29,7 +27,7 @@ public class BytesUtilsTester {
 				}
 			}
 		}, (cost) -> {
-			System.out.println("Time = " + cost / Math.pow(10, 9) + "s");
+			System.out.println(String.format("testShortCoding cost %fs.", cost / Math.pow(10, 9)));
 		});
 	}
 
