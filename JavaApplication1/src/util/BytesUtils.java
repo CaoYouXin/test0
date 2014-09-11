@@ -52,13 +52,13 @@ public class BytesUtils {
         return new byte[]{ b };
     }
     
-    private static int decodeByte(byte b) {
+    private static int decodeByte2Int(byte b) {
     	return (b < 0) ? (b & ((1 << 8) - 1)) | (1 << 7) : b;
     }
     
     public static short decodeShort(byte[] data, Offset offset) {
-    	int high = decodeByte(data[offset.forwardROld(1)]);
-    	int low = decodeByte(data[offset.forwardROld(1)]);
+    	int high = decodeByte2Int(data[offset.forwardROld(1)]);
+    	int low = decodeByte2Int(data[offset.forwardROld(1)]);
     	Debugger.debug(BytesUtils.class, () -> {
     		System.out.println(String.format("data = %s, (high << 8) = %d", Arrays.toString(data), (high << 8)));
     	});
@@ -85,22 +85,39 @@ public class BytesUtils {
     }
     
     public static int decodeInt(byte[] data, Offset offset) {
-    	int l0 = decodeByte(data[offset.forwardROld(1)]);
-    	int l1 = decodeByte(data[offset.forwardROld(1)]);
-    	int l2 = decodeByte(data[offset.forwardROld(1)]);
-    	int l3 = decodeByte(data[offset.forwardROld(1)]);
+    	int l0 = decodeByte2Int(data[offset.forwardROld(1)]);
+    	int l1 = decodeByte2Int(data[offset.forwardROld(1)]);
+    	int l2 = decodeByte2Int(data[offset.forwardROld(1)]);
+    	int l3 = decodeByte2Int(data[offset.forwardROld(1)]);
     	return (l0 << 24) | (l1 << 16) | (l2 << 8) | l3;
     }
 
-    private static final int R1 = R0 << 8;
-    private static final int R2 = R1 << 8;
-    
     public static byte[] encodeInt(int i) {
     	int l0 = i >> 24;
-    	int l1 = (i & R2) >> 16;
-    	int l2 = (i & R1) >> 8;
+    	int l1 = (i >> 16) & R0;
+    	int l2 = (i >> 8) & R0;
     	int l3 = i & R0;
     	return new byte[]{ (byte) l0, (byte) l1, (byte) l2, (byte) l3 };
+    }
+    
+    private static long decodeByte2Long(byte b) {
+    	return decodeByte2Int(b);
+    }
+    
+    public static long decodeLong(byte[] data, Offset offset) {
+    	long ret = 0;
+    	for(int i = 64 -8; i >= 0; i -= 8) {
+    		ret = (decodeByte2Long(data[offset.forwardROld(1)]) << i) | ret;
+    	}
+    	return ret;
+    }
+    
+    public static byte[] encodeLong(long l) {
+    	byte[] bs = new byte[8];
+    	for (int index = 0, i = 64 - 8; i >= 0; i -= 8) {
+    		bs[index++] = (byte) ((l >> i) & R0);
+    	}
+    	return bs;
     }
     
     ////////////////////////////////////////////////////////////////////////////

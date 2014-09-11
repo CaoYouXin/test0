@@ -31,7 +31,7 @@ public class BytesUtilsTester {
 		});
 	}
 
-	@Test
+	
 	public void testIntCoding() {
 		class Valider {
 			byte[] buf = null;
@@ -57,5 +57,31 @@ public class BytesUtilsTester {
 			System.out.println(String.format("testIntCoding cost %fs.", cost / Math.pow(10, 9)));
 		});
 	}
-	
+
+	@Test
+	public void testLongCoding() {
+		class Valider {
+			byte[] buf = null;
+			void valid(long l) {
+				buf = BytesUtils.encodeLong(l);
+				long bl = BytesUtils.decodeLong(buf, new Offset());
+				if (bl != l) {
+					System.err.println(String.format("Wrong with %d while bl = %d, and buf = %s", l, bl
+							, Arrays.toString(buf)));
+				}
+			}
+		};
+		Valider v = new Valider();
+		Debugger.tc(() -> {
+			for (long l = Long.MIN_VALUE; l != 0; l /= 2) {
+				v.valid(l);
+			}
+			for (long l = Long.MAX_VALUE; l != 0; l /= 2) {
+				v.valid(l);
+			}
+		}, (cost) -> {
+			System.out.println(String.format("testShortCoding cost %fs.", cost / Math.pow(10, 9)));
+		});
+	}
+
 }
