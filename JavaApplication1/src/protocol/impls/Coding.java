@@ -7,6 +7,7 @@ package protocol.impls;
 
 import java.util.Collections;
 import java.util.List;
+
 import protocol.spi.coding.ICoding;
 import protocol.spi.coding.IData4Coding;
 import protocol.spi.exceptions.NoConfigException;
@@ -45,10 +46,20 @@ public class Coding implements ICoding {
         List<Class> allTypes = data.allConfigs();
         this.sortBySize(allTypes);
         for (Class clazz : allTypes) {
+        	encodedData.append((byte) TypeSize.val(clazz.getSimpleName()).size());
             List values = data.query(clazz);
-            values.forEach((value) -> {
-                encodedData.append(this.toBytes(value));
-            });
+            encodedData.append(BytesUtils.encodeInt(values.size()));
+            for(Object value : values) {
+            	if (value instanceof Byte) {
+            		encodedData.append((byte) value);
+            	} else if (value instanceof String) {
+            		byte[] encodedString = BytesUtils.encodeString((String) value);
+            		encodedData.append(BytesUtils.encodeInt(encodedString.length));
+            		encodedData.append(encodedString);
+            	} else {
+            		encodedData.append(this.toBytes(value));
+            	}
+            }
         }
         return encodedData.get();
     }
@@ -59,14 +70,25 @@ public class Coding implements ICoding {
      * @2. 移位操作还有待验证啊
      * @param value
      * @return
+     * @throws NoConfigException 
      */
-    private byte[] toBytes(Object value) {
+    private byte[] toBytes(Object value) throws NoConfigException {
         if (value instanceof Boolean) {
             return BytesUtils.encodeBoolean((boolean) value);
-        } else if (value instanceof Byte) {
-            return BytesUtils.encodeByte((byte) value);
+        } else if (value instanceof Character) {
+            return BytesUtils.encodeChar((char) value);
         } else if (value instanceof Short) {
-            return new byte[]{(byte) ((short) value >>> 8), (byte) ((short) value / (1 << 8))};
+            return BytesUtils.encodeShort((short) value);
+        } else if (value instanceof Integer) {
+        	return BytesUtils.encodeInt((int) value);
+        } else if (value instanceof Long) {
+        	return BytesUtils.encodeLong((long) value);
+        } else if (value instanceof Float) {
+        	return BytesUtils.encodeFloat((float) value);
+        } else if (value instanceof Double) {
+        	return BytesUtils.encodeDouble((double) value);
+        } else if (value instanceof IData4Coding) {
+        	return this.encoding((IData4Coding) value);
         }
         return new byte[0];
     }

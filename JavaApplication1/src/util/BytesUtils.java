@@ -177,6 +177,9 @@ public class BytesUtils {
         }
 
         public Bytes append(byte[] data) {
+        	if (null == data)
+        		return this;
+        	
             if (null == this.bytes) {
                 this.offset = new Offset();
                 this.bytes = new byte[this.initLength(data.length)];
@@ -184,15 +187,32 @@ public class BytesUtils {
                 return this;
             }
 
-            if (this.bytes.length - this.offset.get() < data.length) {
+            this.expandIfNeeded(data.length);
+            System.arraycopy(data, 0, this.bytes, this.offset.forwardROld(data.length), data.length);
+            return this;
+        }
+
+		private void expandIfNeeded(int len) {
+			if (this.bytes.length - this.offset.get() < len) {
                 // 扩容
                 byte[] newBytes = new byte[this.bytes.length * 2];
                 System.arraycopy(this.bytes, 0, newBytes, 0, this.offset.get());
                 this.bytes = newBytes;
             }
-            System.arraycopy(data, 0, this.bytes, this.offset.forwardROld(data.length), data.length);
+		}
+
+		public Bytes append(byte b) {
+			if (null == this.bytes) {
+				this.offset = new Offset();
+                this.bytes = new byte[this.initLength(1)];
+                this.bytes[0] = b;
+                return this;
+			}
+			
+			this.expandIfNeeded(1);
+            this.bytes[this.offset.forwardROld(1)] = b;
             return this;
-        }
+		}
 
         private int initLength(int length) {
             int len = this.offset.forwardRNew(length) / 2 * 4;

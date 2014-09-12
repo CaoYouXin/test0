@@ -19,6 +19,7 @@ public enum TypeSize {
     Long(120),
     Float(80),
     Double(120),
+    String(130),
     Other(150);
 
     private int size;

@@ -15,8 +15,11 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import protocol.spi.exceptions.DataWrongTypeException;
+import protocol.spi.business.Data2Object;
 import protocol.spi.business.IData4Bizz;
+import protocol.spi.business.Object2Data;
 import protocol.spi.coding.IData4Coding;
 import protocol.spi.exceptions.NoConfigException;
 
@@ -36,13 +39,11 @@ public class Data implements IData4Bizz, IData4Coding {
         this.data = new HashMap<>();
     }
 
-    @Override
-    public Object get(String key) {
+    private Object get(String key) {
         return this.data.get(key);
     }
 
-    @Override
-    public void set(String key, Object value) throws DataWrongTypeException, NoConfigException {
+    private void set(String key, Object value) throws DataWrongTypeException, NoConfigException {
         if (null == value) {
             return;
         }
@@ -97,7 +98,7 @@ public class Data implements IData4Bizz, IData4Coding {
             // 添加到config中
         });
 
-	//排序整理
+        //排序整理
         this.configed = true;
         return this.config.get(clazz);
     }
@@ -106,5 +107,148 @@ public class Data implements IData4Bizz, IData4Coding {
     public List<Class> allConfigs() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+	@Override
+	public Boolean getBoolean(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Byte getByte(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Character getChar(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Short getShort(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getInt(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Long getLong(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Float getFloat(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Double getDouble(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getString(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T getObject(String key, Object2Data<T> trans) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T[] getObjects(String key, Object2Data<T> trans) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void set(String key, Boolean value) throws DataWrongTypeException,
+			NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void set(String key, Byte value) throws DataWrongTypeException,
+			NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void set(String key, Character value) throws DataWrongTypeException,
+			NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void set(String key, Short value) throws DataWrongTypeException,
+			NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void set(String key, Integer value) throws DataWrongTypeException,
+			NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void set(String key, Long value) throws DataWrongTypeException,
+			NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void set(String key, Float value) throws DataWrongTypeException,
+			NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void set(String key, Double value) throws DataWrongTypeException,
+			NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void set(String key, String value) throws DataWrongTypeException,
+			NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public <T> void set(String key, T value, Data2Object<T> trans)
+			throws DataWrongTypeException, NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public <T> void set(String key, T[] value, Data2Object<T> trans)
+			throws DataWrongTypeException, NoConfigException {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

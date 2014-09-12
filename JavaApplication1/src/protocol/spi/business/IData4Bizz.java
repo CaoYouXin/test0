@@ -17,9 +17,29 @@ import protocol.spi.exceptions.NoConfigException;
  * @author caolisheng
  */
 public interface IData4Bizz {
-	
-	Object get(String key);
-	
-	void set(String key, Object value) throws DataWrongTypeException, NoConfigException;
+
+	Boolean getBoolean(String key);
+	Byte getByte(String key);
+	Character getChar(String key);
+	Short getShort(String key);
+	Integer getInt(String key);
+	Long getLong(String key);
+	Float getFloat(String key);
+	Double getDouble(String key);
+	String getString(String key);
+	<T> T getObject(String key, Object2Data<T> trans);
+	<T> T[] getObjects(String key, Object2Data<T> trans);
+
+	void set(String key, Boolean value) throws DataWrongTypeException, NoConfigException;
+	void set(String key, Byte value) throws DataWrongTypeException, NoConfigException;
+	void set(String key, Character value) throws DataWrongTypeException, NoConfigException;
+	void set(String key, Short value) throws DataWrongTypeException, NoConfigException;
+	void set(String key, Integer value) throws DataWrongTypeException, NoConfigException;
+	void set(String key, Long value) throws DataWrongTypeException, NoConfigException;
+	void set(String key, Float value) throws DataWrongTypeException, NoConfigException;
+	void set(String key, Double value) throws DataWrongTypeException, NoConfigException;
+	void set(String key, String value) throws DataWrongTypeException, NoConfigException;
+	<T> void set(String key, T value, Data2Object<T> trans) throws DataWrongTypeException, NoConfigException;
+	<T> void set(String key, T[] value, Data2Object<T> trans) throws DataWrongTypeException, NoConfigException;
 	
 }
