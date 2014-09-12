@@ -120,6 +120,22 @@ public class BytesUtils {
     	return bs;
     }
     
+    public static float decodeFloat(byte[] data, Offset offset) {
+    	return Float.intBitsToFloat(decodeInt(data, offset));
+    }
+    
+    public static byte[] encodeFloat(float f) {
+    	return encodeInt(Float.floatToIntBits(f));
+    }
+    
+    public static double decodeDouble(byte[] data, Offset offset) {
+    	return Double.longBitsToDouble(decodeLong(data, offset));
+    }
+    
+    public static byte[] encodeDouble(double d) {
+    	return encodeLong(Double.doubleToLongBits(d));
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     
     public static class Offset {

@@ -84,4 +84,12 @@ public class BytesUtilsTester {
 		});
 	}
 
+	@Test
+	public void testFLoatCoding() {
+		float f = -1.3f;
+		byte[] buf = BytesUtils.encodeFloat(f);
+		float bf = BytesUtils.decodeFloat(buf, new Offset());
+		System.out.println(f == bf);
+	}
+	
 }
