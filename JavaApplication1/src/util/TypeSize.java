@@ -42,4 +42,8 @@ public enum TypeSize {
         return Other;
     }
 
+	public static boolean isOther(Object o) {
+		return Other == val(o.getClass().getSimpleName());
+	}
+
 }

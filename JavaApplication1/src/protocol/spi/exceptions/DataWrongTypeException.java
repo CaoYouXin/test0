@@ -10,7 +10,7 @@ package protocol.spi.exceptions;
  *
  * @author caolisheng
  */
-public class DataWrongTypeException extends Exception {
+public class DataWrongTypeException extends RuntimeException {
 
 	/**
 	 * Creates a new instance of <code>DataWrongTypeException</code> without detail message.

@@ -1,5 +1,7 @@
 package protocol.spi.business;
 
+import java.util.Map;
+
 /**
  * 
  * @author caolisheng
@@ -7,6 +9,6 @@ package protocol.spi.business;
  */
 public interface Object2Data<T> {
 
-	IData4Bizz trans(T o);
+	void trans(IData4Bizz data, T o);
 	
 }

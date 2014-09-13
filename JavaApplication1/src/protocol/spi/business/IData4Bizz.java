@@ -6,6 +6,8 @@
 
 package protocol.spi.business;
 
+import java.util.Set;
+
 import protocol.spi.exceptions.DataWrongTypeException;
 import protocol.spi.exceptions.NoConfigException;
 
@@ -27,19 +29,19 @@ public interface IData4Bizz {
 	Float getFloat(String key);
 	Double getDouble(String key);
 	String getString(String key);
-	<T> T getObject(String key, Object2Data<T> trans);
-	<T> T[] getObjects(String key, Object2Data<T> trans);
+	<T> T getObject(String key, Data2Object<T> trans);
+	<T> T[] getObjects(String key, Data2Object<T> trans);
 
-	void set(String key, Boolean value) throws DataWrongTypeException, NoConfigException;
-	void set(String key, Byte value) throws DataWrongTypeException, NoConfigException;
-	void set(String key, Character value) throws DataWrongTypeException, NoConfigException;
-	void set(String key, Short value) throws DataWrongTypeException, NoConfigException;
-	void set(String key, Integer value) throws DataWrongTypeException, NoConfigException;
-	void set(String key, Long value) throws DataWrongTypeException, NoConfigException;
-	void set(String key, Float value) throws DataWrongTypeException, NoConfigException;
-	void set(String key, Double value) throws DataWrongTypeException, NoConfigException;
-	void set(String key, String value) throws DataWrongTypeException, NoConfigException;
-	<T> void set(String key, T value, Data2Object<T> trans) throws DataWrongTypeException, NoConfigException;
-	<T> void set(String key, T[] value, Data2Object<T> trans) throws DataWrongTypeException, NoConfigException;
+	void set(String key, Boolean value) throws NoConfigException;
+	void set(String key, Byte value) throws NoConfigException;
+	void set(String key, Character value) throws NoConfigException;
+	void set(String key, Short value) throws NoConfigException;
+	void set(String key, Integer value) throws NoConfigException;
+	void set(String key, Long value) throws NoConfigException;
+	void set(String key, Float value) throws NoConfigException;
+	void set(String key, Double value) throws NoConfigException;
+	void set(String key, String value) throws NoConfigException;
+	<T> void set(String key, T value, Object2Data<T> trans) throws NoConfigException;
+	<T> void set(String key, T[] value, Object2Data<T> trans) throws NoConfigException;
 	
 }

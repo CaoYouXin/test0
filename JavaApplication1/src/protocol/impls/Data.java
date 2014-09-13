@@ -5,6 +5,7 @@
  */
 package protocol.impls;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,6 +24,7 @@ import protocol.spi.business.IData4Bizz;
 import protocol.spi.business.Object2Data;
 import protocol.spi.coding.IData4Coding;
 import protocol.spi.exceptions.NoConfigException;
+import util.TypeSize;
 
 /**
  *
@@ -43,16 +46,24 @@ public class Data implements IData4Bizz, IData4Coding {
         return this.data.get(key);
     }
 
-    private void set(String key, Object value) throws DataWrongTypeException, NoConfigException {
+    private void set(String key, Object value, boolean isCheckType) throws DataWrongTypeException, NoConfigException {
         if (null == value) {
             return;
         }
-        List<String> keys = this.config(value.getClass());
-        if (!keys.contains(key)) {
-            throw new DataWrongTypeException(String.format("%s got the wrong type[%s].", key, value.getClass().getName()));
+        
+        if (isCheckType) {
+	        this.checkType(key, value.getClass());
         }
+        
         this.data.put(key, value);
     }
+
+	private void checkType(String key, Class clazz) throws NoConfigException, DataWrongTypeException {
+		List<String> keys = this.config(clazz);
+		if (!keys.contains(key)) {
+		    throw new DataWrongTypeException(String.format("%s got the wrong type[%s].", key, clazz.getName()));
+		}
+	}
 
     @Override
     public <T> List<T> query(Class<T> clazz) throws NoConfigException {
@@ -68,7 +79,7 @@ public class Data implements IData4Bizz, IData4Coding {
     @Override
     public <T> void add(Map<String, T> data) throws DataWrongTypeException, NoConfigException {
         for (Entry<String, T> entry : data.entrySet()) {
-            this.set(entry.getKey(), entry.getValue());
+            this.set(entry.getKey(), entry.getValue(), false);
         }
     }
 
@@ -163,95 +174,98 @@ public class Data implements IData4Bizz, IData4Coding {
 	}
 
 	@Override
-	public <T> T getObject(String key, Object2Data<T> trans) {
+	public <T> T getObject(String key, Data2Object<T> trans) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T> T[] getObjects(String key, Object2Data<T> trans) {
+	public <T> T[] getObjects(String key, Data2Object<T> trans) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void set(String key, Boolean value) throws DataWrongTypeException,
-			NoConfigException {
+	public void set(String key, Boolean value) throws NoConfigException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void set(String key, Byte value) throws DataWrongTypeException,
-			NoConfigException {
+	public void set(String key, Byte value) throws NoConfigException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void set(String key, Character value) throws DataWrongTypeException,
-			NoConfigException {
+	public void set(String key, Character value) throws NoConfigException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void set(String key, Short value) throws DataWrongTypeException,
-			NoConfigException {
+	public void set(String key, Short value) throws NoConfigException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void set(String key, Integer value) throws DataWrongTypeException,
-			NoConfigException {
+	public void set(String key, Integer value) throws NoConfigException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void set(String key, Long value) throws DataWrongTypeException,
-			NoConfigException {
+	public void set(String key, Long value) throws NoConfigException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void set(String key, Float value) throws DataWrongTypeException,
-			NoConfigException {
+	public void set(String key, Float value) throws NoConfigException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void set(String key, Double value) throws DataWrongTypeException,
-			NoConfigException {
+	public void set(String key, Double value) throws NoConfigException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void set(String key, String value) throws DataWrongTypeException,
-			NoConfigException {
+	public void set(String key, String value) throws NoConfigException {
+		this.set(key, value, true);
+	}
+
+	@Override
+	public <T> void set(String key, T value, Object2Data<T> trans)
+			throws NoConfigException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public <T> void set(String key, T value, Data2Object<T> trans)
-			throws DataWrongTypeException, NoConfigException {
-		// TODO Auto-generated method stub
-		
-	}
+	public <T> void set(String key, T[] value, Object2Data<T> trans)
+			throws NoConfigException {
 
-	@Override
-	public <T> void set(String key, T[] value, Data2Object<T> trans)
-			throws DataWrongTypeException, NoConfigException {
 		if (null == value || 0 == value.length) {
 			return;
 		}
 		
+		Class<? extends Object> clazz = value[0].getClass();
+		this.checkType(key, clazz);
 		
+		String myConfigPath = clazz.getName().replaceAll(".", File.separator);
+		
+		Data[] data = new Data[value.length];
+		for (int i = 0; i < data.length; i++) {
+			data[i] = new Data(myConfigPath);
+			trans.trans(data[i], value[i]);
+		}
+		
+		this.set(key, data, false);
 	}
 
 }
+
