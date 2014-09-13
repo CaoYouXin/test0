@@ -14,17 +14,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import protocol.spi.exceptions.DataWrongTypeException;
 import protocol.spi.business.Data2Object;
 import protocol.spi.business.IData4Bizz;
 import protocol.spi.business.Object2Data;
 import protocol.spi.coding.IData4Coding;
+import protocol.spi.exceptions.DataWrongTypeException;
 import protocol.spi.exceptions.NoConfigException;
-import util.TypeSize;
 
 /**
  *
@@ -97,19 +95,7 @@ public class Data implements IData4Bizz, IData4Coding {
             throw new NoConfigException("No Config File specified.");
         }
 
-        Properties props = new Properties();
-        try {
-            props.loadFromXML(new FileInputStream(this.configPath));
-        } catch (IOException ex) {
-            Logger.getLogger(Data.class.getName()).log(Level.SEVERE, null, ex);
-            throw new NoConfigException("Config File Can not open.");
-        }
-
-        props.forEach((Object t, Object u) -> {
-            // 添加到config中
-        });
-
-        //排序整理
+        this.config = ConfigManager.config(this.configPath);
         this.configed = true;
         return this.config.get(clazz);
     }
@@ -241,8 +227,15 @@ public class Data implements IData4Bizz, IData4Coding {
 	@Override
 	public <T> void set(String key, T value, Object2Data<T> trans)
 			throws NoConfigException {
-		// TODO Auto-generated method stub
+
+		if (null == value) {
+			return;
+		}
 		
+		Class<? extends Object> clazz = value.getClass();
+		this.checkType(key, clazz);
+		
+		String myConfigPath = clazz.getName().replaceAll(".", File.separator);
 	}
 
 	@Override
