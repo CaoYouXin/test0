@@ -247,7 +247,10 @@ public class Data implements IData4Bizz, IData4Coding {
 	@Override
 	public <T> void set(String key, T[] value, Data2Object<T> trans)
 			throws DataWrongTypeException, NoConfigException {
-		// TODO Auto-generated method stub
+		if (null == value || 0 == value.length) {
+			return;
+		}
+		
 		
 	}
 
