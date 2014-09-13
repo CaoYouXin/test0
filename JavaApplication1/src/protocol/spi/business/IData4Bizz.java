@@ -6,6 +6,7 @@
 
 package protocol.spi.business;
 
+import java.util.List;
 import java.util.Set;
 
 import protocol.spi.exceptions.DataWrongTypeException;
@@ -30,7 +31,7 @@ public interface IData4Bizz {
 	Double getDouble(String key);
 	String getString(String key);
 	<T> T getObject(String key, Data2Object<T> trans);
-	<T> T[] getObjects(String key, Data2Object<T> trans);
+	<T> List<T> getObjects(String key, Data2Object<T> trans);
 
 	void set(String key, Boolean value) throws NoConfigException;
 	void set(String key, Byte value) throws NoConfigException;

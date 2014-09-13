@@ -107,116 +107,103 @@ public class Data implements IData4Bizz, IData4Coding {
 
 	@Override
 	public Boolean getBoolean(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Boolean) this.get(key);
 	}
 
 	@Override
 	public Byte getByte(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Byte) this.get(key);
 	}
 
 	@Override
 	public Character getChar(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Character) this.get(key);
 	}
 
 	@Override
 	public Short getShort(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Short) this.get(key);
 	}
 
 	@Override
 	public Integer getInt(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Integer) this.get(key);
 	}
 
 	@Override
 	public Long getLong(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Long) this.get(key);
 	}
 
 	@Override
 	public Float getFloat(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Float) this.get(key);
 	}
 
 	@Override
 	public Double getDouble(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Double) this.get(key);
 	}
 
 	@Override
 	public String getString(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (String) this.get(key);
 	}
 
 	@Override
 	public <T> T getObject(String key, Data2Object<T> trans) {
-		// TODO Auto-generated method stub
-		return null;
+		Data data = (Data) this.get(key);
+		return trans.trans(data);
 	}
 
 	@Override
-	public <T> T[] getObjects(String key, Data2Object<T> trans) {
-		// TODO Auto-generated method stub
-		return null;
+	public <T> List<T> getObjects(String key, Data2Object<T> trans) {
+		List<T> ret = new ArrayList<>();
+		Data[] data = (Data[]) this.get(key);
+		for (Data d : data) {
+			ret.add(trans.trans(d));
+		}
+		return ret;
 	}
 
 	@Override
 	public void set(String key, Boolean value) throws NoConfigException {
-		// TODO Auto-generated method stub
-		
+		this.set(key, value, false);
 	}
 
 	@Override
 	public void set(String key, Byte value) throws NoConfigException {
-		// TODO Auto-generated method stub
-		
+		this.set(key, value, false);
 	}
 
 	@Override
 	public void set(String key, Character value) throws NoConfigException {
-		// TODO Auto-generated method stub
-		
+		this.set(key, value, false);
 	}
 
 	@Override
 	public void set(String key, Short value) throws NoConfigException {
-		// TODO Auto-generated method stub
-		
+		this.set(key, value, false);
 	}
 
 	@Override
 	public void set(String key, Integer value) throws NoConfigException {
-		// TODO Auto-generated method stub
-		
+		this.set(key, value, false);
 	}
 
 	@Override
 	public void set(String key, Long value) throws NoConfigException {
-		// TODO Auto-generated method stub
-		
+		this.set(key, value, false);
 	}
 
 	@Override
 	public void set(String key, Float value) throws NoConfigException {
-		// TODO Auto-generated method stub
-		
+		this.set(key, value, false);
 	}
 
 	@Override
 	public void set(String key, Double value) throws NoConfigException {
-		// TODO Auto-generated method stub
-		
+		this.set(key, value, false);
 	}
 
 	@Override
@@ -236,6 +223,10 @@ public class Data implements IData4Bizz, IData4Coding {
 		this.checkType(key, clazz);
 		
 		String myConfigPath = clazz.getName().replaceAll(".", File.separator);
+		Data data = new Data(myConfigPath);
+		
+		trans.trans(data, value);
+		this.set(key, data, false);
 	}
 
 	@Override
