@@ -6,16 +6,11 @@
 package protocol.impls;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import protocol.spi.business.Data2Object;
 import protocol.spi.business.IData4Bizz;
@@ -32,7 +27,7 @@ public class Data implements IData4Bizz, IData4Coding {
 
     private String configPath;
     private boolean configed = false;
-    private Map<Class, List<String>> config;
+    private Map<Class<? extends Object>, List<String>> config;
     private Map<String, Object> data;
 
     public Data(String configPath) {
@@ -56,14 +51,15 @@ public class Data implements IData4Bizz, IData4Coding {
         this.data.put(key, value);
     }
 
-	private void checkType(String key, Class clazz) throws NoConfigException, DataWrongTypeException {
+	private void checkType(String key, Class<? extends Object> clazz) throws NoConfigException, DataWrongTypeException {
 		List<String> keys = this.config(clazz);
 		if (!keys.contains(key)) {
 		    throw new DataWrongTypeException(String.format("%s got the wrong type[%s].", key, clazz.getName()));
 		}
 	}
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> List<T> query(Class<T> clazz) throws NoConfigException {
         List<T> ret = new ArrayList<>();
         List<String> keys = this.config(clazz);
@@ -101,7 +97,7 @@ public class Data implements IData4Bizz, IData4Coding {
     }
 
     @Override
-    public List<Class> allConfigs() {
+    public List<Class<? extends Object>> allConfigs() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

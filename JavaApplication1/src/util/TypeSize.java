@@ -11,24 +11,25 @@ package util;
  */
 public enum TypeSize {
 
-    Boolean(20),
-    Byte(20),
-    Char(40),
-    Short(40),
-    Integer(80),
-    Long(120),
-    Float(80),
-    Double(120),
-    String(130),
-    Other(150);
+    Boolean((byte) 10),
+    Byte((byte) 10),
+    Char((byte) 20),
+    Short((byte) 20),
+    Integer((byte) 40),
+    Long((byte) 80),
+    Float((byte) 40),
+    Double((byte) 80),
+    String((byte) 100),
+    Object((byte) 110),
+    Array((byte) 120);
 
-    private int size;
+    private byte size;
 
-    private TypeSize(int size) {
+    private TypeSize(byte size) {
         this.size = size;
     }
     
-    public int size() {
+    public byte size() {
         return this.size;
     }
 
@@ -39,11 +40,13 @@ public enum TypeSize {
                 return ats;
             }
         }
-        return Other;
+        return Object;
     }
 
-	public static boolean isOther(Object o) {
-		return Other == val(o.getClass().getSimpleName());
+	public static TypeSize val(Object o) {
+		Class<? extends Object> clazz = o.getClass();
+		TypeSize val = val(clazz.getSimpleName());
+		return Object == val ? (clazz.isArray() ? Array : Object) : val;
 	}
 
 }

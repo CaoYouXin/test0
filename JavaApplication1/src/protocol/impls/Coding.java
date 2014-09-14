@@ -43,11 +43,11 @@ public class Coding implements ICoding {
     @Override
     public byte[] encoding(IData4Coding data) throws NoConfigException {
         Bytes encodedData = new Bytes();
-        List<Class> allTypes = data.allConfigs();
+        List<Class<? extends Object>> allTypes = data.allConfigs();
         this.sortBySize(allTypes);
-        for (Class clazz : allTypes) {
+        for (Class<? extends Object> clazz : allTypes) {
         	encodedData.append((byte) TypeSize.val(clazz.getSimpleName()).size());
-            List values = data.query(clazz);
+            List<? extends Object> values = data.query(clazz);
             encodedData.append(BytesUtils.encodeInt(values.size()));
             for(Object value : values) {
             	if (value instanceof Byte) {
@@ -57,7 +57,7 @@ public class Coding implements ICoding {
             		encodedData.append(BytesUtils.encodeInt(encodedString.length));
             		encodedData.append(encodedString);
             	} else {
-            		encodedData.append(this.toBytes(value));
+            		this.toBytes(encodedData, value);
             	}
             }
         }
@@ -67,37 +67,44 @@ public class Coding implements ICoding {
     /**
      * @problems 如下
      * @1. 这里可能有该死的递归
-     * @2. 移位操作还有待验证啊
+     * @2. 移位操作还有待验证啊（已经转移到BytesUtils里的）
      * @param value
      * @return
      * @throws NoConfigException 
      */
-    private byte[] toBytes(Object value) throws NoConfigException {
+    private Bytes toBytes(Bytes encodedData, Object value) throws NoConfigException {
         if (value instanceof Boolean) {
-            return BytesUtils.encodeBoolean((boolean) value);
+            return encodedData.append(BytesUtils.encodeBoolean((boolean) value));
         } else if (value instanceof Character) {
-            return BytesUtils.encodeChar((char) value);
+            return encodedData.append(BytesUtils.encodeChar((char) value));
         } else if (value instanceof Short) {
-            return BytesUtils.encodeShort((short) value);
+            return encodedData.append(BytesUtils.encodeShort((short) value));
         } else if (value instanceof Integer) {
-        	return BytesUtils.encodeInt((int) value);
+        	return encodedData.append(BytesUtils.encodeInt((int) value));
         } else if (value instanceof Long) {
-        	return BytesUtils.encodeLong((long) value);
+        	return encodedData.append(BytesUtils.encodeLong((long) value));
         } else if (value instanceof Float) {
-        	return BytesUtils.encodeFloat((float) value);
+        	return encodedData.append(BytesUtils.encodeFloat((float) value));
         } else if (value instanceof Double) {
-        	return BytesUtils.encodeDouble((double) value);
+        	return encodedData.append(BytesUtils.encodeDouble((double) value));
         } else if (value instanceof IData4Coding) {
-        	return this.encoding((IData4Coding) value);
+        	return encodedData.append(this.encoding((IData4Coding) value));
+        } else if (value instanceof IData4Coding[]) {
+        	IData4Coding[] datas = (IData4Coding[]) value;
+        	encodedData.append(BytesUtils.encodeInt(datas.length));
+        	for (IData4Coding data : datas) {
+        		encodedData.append(this.encoding(data));
+        	}
+        	return encodedData;
         }
-        return new byte[0];
+        return encodedData;
     }
 
     /**
      * @desc 占空间小的基本类型排在前面
      * @param allTyps
      */
-    private void sortBySize(List<Class> allTyps) {
+    private void sortBySize(List<Class<? extends Object>> allTyps) {
         Collections.sort(allTyps, (c1, c2) -> {
             return TypeSize.val(c1.getSimpleName()).size() - TypeSize.val(c2.getSimpleName()).size();
         });

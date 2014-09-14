@@ -18,17 +18,17 @@ import protocol.spi.exceptions.NoConfigException;
  */
 public class ConfigManager {
 
-	private static Map<String, Map<Class, List<String>>> configs = new HashMap<>();
+	private static Map<String, Map<Class<? extends Object>, List<String>>> configs = new HashMap<>();
 	
-	public static Map<Class, List<String>> config(String path) throws NoConfigException {
-		Map<Class, List<String>> ret = configs.get(path);
+	public static Map<Class<? extends Object>, List<String>> config(String path) throws NoConfigException {
+		Map<Class<? extends Object>, List<String>> ret = configs.get(path);
 		if (null == ret)
 			return initConfig(path);
 		return ret;
 	}
 
-	private static synchronized Map<Class, List<String>> initConfig(String path) throws NoConfigException {
-		Map<Class, List<String>> ret = configs.get(path);
+	private static synchronized Map<Class<? extends Object>, List<String>> initConfig(String path) throws NoConfigException {
+		Map<Class<? extends Object>, List<String>> ret = configs.get(path);
 		if (null != ret)
 			return ret;
 		
@@ -49,7 +49,7 @@ public class ConfigManager {
         //排序整理
         
         
-		Map<Class, List<String>> unmodifiableMap = Collections.unmodifiableMap(ret);
+		Map<Class<? extends Object>, List<String>> unmodifiableMap = Collections.unmodifiableMap(ret);
 		configs.put(path, unmodifiableMap);
 		return unmodifiableMap;
 	}
