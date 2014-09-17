@@ -28,7 +28,7 @@ public class Debugger {
 			fn.debug();
 	}
 
-	public static void debug(Class clazz, DoDebug fn) {
+	public static void debug(Class<? extends Object> clazz, DoDebug fn) {
 		DebugType dt = DebugType.val(clazz.getSimpleName());
 		if (null == dt) {
 			fn.debug();

@@ -6,13 +6,13 @@
 package protocol.tool;
 
 import java.awt.Component;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.text.JTextComponent;
+
 import util.CharUtils;
 import util.Debugger;
 
@@ -20,9 +20,15 @@ import util.Debugger;
  *
  * @author caolisheng
  */
-public class TypeComboBox extends JComboBox {
+public class TypeComboBox extends JComboBox<String> {
 
-    public TypeComboBox(JFrame frame, EnterTyped fn) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@SuppressWarnings("unchecked")
+	public TypeComboBox(JFrame frame, EnterTyped fn) {
         setEditable(true);
         setModel(new MyFilterComboBoxModel(ComboElemPersistence.getComboData()));
         setPreferredSize(new java.awt.Dimension(100, 21));
@@ -58,7 +64,7 @@ public class TypeComboBox extends JComboBox {
                     System.out.println("perfix: " + perfix);
                 });
 
-                IFilterComboBoxModel model = (IFilterComboBoxModel) getModel();
+                IFilterComboBoxModel<String> model = (IFilterComboBoxModel<String>) getModel();
                 hidePopup();
                 model.filter(perfix);
                 showPopup();

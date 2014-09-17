@@ -7,9 +7,7 @@
 package protocol.spi.business;
 
 import java.util.List;
-import java.util.Set;
 
-import protocol.spi.exceptions.DataWrongTypeException;
 import protocol.spi.exceptions.NoConfigException;
 
 /**

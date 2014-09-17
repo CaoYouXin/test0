@@ -8,10 +8,13 @@ package protocol.tool;
 import java.awt.BorderLayout;
 
 import static java.awt.BorderLayout.*;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+
 import javax.swing.*;
+
 import util.Debugger;
 import util.StringUtils;
 
@@ -21,9 +24,14 @@ import util.StringUtils;
  */
 public class ManualMainFrame extends JFrame {
 
-    private javax.swing.JButton jButton1;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8501286891758802468L;
+	
+	private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -114,7 +122,7 @@ public class ManualMainFrame extends JFrame {
             return;
         }
 
-        MutableComboBoxModel model = (MutableComboBoxModel) jComboBox1.getModel();
+        MutableComboBoxModel<String> model = (MutableComboBoxModel<String>) jComboBox1.getModel();
         model.addElement(type);
 
         jPanel1.add(new ProtocolElem(this, jTextField2.getText().trim(), ((String) jComboBox1.getSelectedItem()).trim()));
@@ -146,7 +154,7 @@ public class ManualMainFrame extends JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManualMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

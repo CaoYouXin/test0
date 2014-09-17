@@ -21,7 +21,12 @@ import util.TypeSize;
  */
 public final class ProtocolElem extends JButton {
 
-    private static final int sHeight = 15;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static final int sHeight = 15;
 
     private ProtocolElem thisPE = this;
 

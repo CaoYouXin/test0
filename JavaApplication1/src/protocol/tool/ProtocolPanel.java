@@ -15,7 +15,12 @@ import javax.swing.JPanel;
  */
 public class ProtocolPanel extends JPanel {
 
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Component add(Component comp) {
         return super.add(comp, this.calIndex(comp));
     }

@@ -13,6 +13,11 @@ package protocol.spi.exceptions;
 public class NoConfigException extends Exception {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Creates a new instance of <code>NoConfigException</code> without detail message.
 	 */
 	public NoConfigException() {

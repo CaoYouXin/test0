@@ -1,6 +1,5 @@
 package protocol.spi.business;
 
-import java.util.Map;
 
 /**
  * 

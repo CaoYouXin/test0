@@ -13,6 +13,11 @@ package protocol.tool;
 public class ComboDataNotSyncException extends RuntimeException {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Creates a new instance of <code>ComboDataNotSyncException</code> without
      * detail message.
      */

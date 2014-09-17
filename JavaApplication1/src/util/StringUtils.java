@@ -31,7 +31,7 @@ public class StringUtils {
         return true;
     }
 
-    public static String join(List os, String seprator) {
+    public static String join(List<? extends Object> os, String seprator) {
         StringBuilder sb = new StringBuilder();
         os.stream().forEach((Object o) -> {
             sb.append(seprator).append(o.toString());
@@ -57,7 +57,7 @@ public class StringUtils {
 
     public static String replace(String... cols) {
         StringBuilder sb = new StringBuilder();
-        for (String string : cols) {
+        for (int i=0; i<cols.length; i++) {
             sb.append(",?");
         }
         return cols.length > 0 ? sb.substring(1) : "";
@@ -72,7 +72,7 @@ public class StringUtils {
     }
 
     public static List<Integer> splitToIntList(String string, String seprator) {
-        List<Integer> nums = new ArrayList();
+        List<Integer> nums = new ArrayList<>();
         String[] split = string.split(seprator);
         for (int i = 0; i < split.length; i++) {
             nums.add(Integer.parseInt(split[i]));

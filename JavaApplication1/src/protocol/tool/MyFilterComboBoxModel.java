@@ -18,7 +18,12 @@ import util.Debugger;
  */
 public class MyFilterComboBoxModel extends DefaultComboBoxModel<String> implements IFilterComboBoxModel<String> {
 
-    private final List<String> allElems;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private final List<String> allElems;
     
     public MyFilterComboBoxModel(String[] elems) {
         super(elems);
