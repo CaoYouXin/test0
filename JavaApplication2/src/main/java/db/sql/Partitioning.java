@@ -57,7 +57,7 @@ public final class Partitioning {
 			case hash:
 				return String.format("PARTITION BY HASH (%s) PARTITIONS %d", parameter, count);
 			default:
-				throw new RuntimeException(String.format("绝对零概率事件（%s）", Constants.MOBILE_NUMBER));
+				throw new RuntimeException(String.format("绝对零概率事件（%s）", "你妹呀"));
 		}
 	}
 
