@@ -11,7 +11,6 @@ package consts;
  */
 public final class Constants {
 
-	public static final String MOBILE_NUMBER = "185-3527-6856";
 	public static final int CLOTH_SIZE_DIFF = 8;
 	public static final String ADMIN_PWD = "admin";
 
