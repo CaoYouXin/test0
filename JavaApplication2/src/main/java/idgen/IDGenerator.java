@@ -5,14 +5,15 @@
  */
 package idgen;
 
-import cn.clscpu.storehouse.cache.Cache;
-import cn.clscpu.storehouse.cache.Synchronizer;
-import cn.clscpu.storehouse.util.db.DB;
-import cn.clscpu.storehouse.util.db.DBConfig;
-import cn.clscpu.storehouse.util.db.MyResultSet;
-import cn.clscpu.storehouse.util.db.sql.SQLBuilder;
 import java.sql.SQLException;
 import java.util.Map;
+
+import cache.Synchronizer;
+import db.DB;
+import db.DBConfig;
+import db.MyResultSet;
+import db.sql.SQLBuilder;
+import cache.Cache;
 
 /**
  *
