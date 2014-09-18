@@ -8,8 +8,6 @@ package db.sql;
 import java.util.ArrayList;
 import java.util.List;
 
-import consts.Constants;
-
 
 /**
  *
