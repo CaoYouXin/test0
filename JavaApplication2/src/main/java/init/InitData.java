@@ -15,11 +15,11 @@ import db.sql.SQLBuilder;
  *
  * @author CPU
  */
-public class InitData implements Init {
+public class InitData extends Init {
 
-	private String schema, table;
-	private String[] columns;
-	private List<Object[]> data;
+	protected String schema, table;
+	protected String[] columns;
+	protected List<Object[]> data;
 
 	public InitData(String schema, String table, String... columns) {
 		this.schema = schema;

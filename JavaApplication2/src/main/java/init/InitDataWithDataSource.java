@@ -6,31 +6,26 @@
 
 package init;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import db.DB;
 import db.sql.SQLBuilder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author CPU
  */
-public class InitRoleResourceData implements Init {
+public class InitDataWithDataSource extends InitData {
 
-	private String schema, table;
-	private String[] columns;
-	private List<Object[]> data;
 	private Map<String, Integer> datasource;
 	
-	public InitRoleResourceData(String schema, String table, Map<String, Integer> datasource, String... columns) {
-		this.schema = schema;
-		this.table = table;
-		this.datasource = datasource;
-		this.columns = columns;
+	public InitDataWithDataSource(String schema, String table, String from, String to, Map<String, Integer> datasource, String... columns) {
+		super(schema, table, columns);
+		// TODO
 	}
 
-	public InitRoleResourceData addData(Integer roleId, String... row) {
+	public InitDataWithDataSource addData(Integer roleId, String... row) {
 		if (data == null) {
 			data = new ArrayList<>();
 		}

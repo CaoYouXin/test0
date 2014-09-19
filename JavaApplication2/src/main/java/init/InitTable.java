@@ -8,6 +8,8 @@ package init;
 import java.util.ArrayList;
 import java.util.List;
 
+import utils.Suc;
+import utils.flag.FlagSupport;
 import db.DB;
 import db.sql.ColumnInfo;
 import db.sql.Index;
@@ -19,8 +21,10 @@ import db.sql.SQLBuilder;
  *
  * @author CPU
  */
-public class InitTable implements Init {
+public class InitTable extends Init {
 
+	private static final String DROP_IF_EXIST = "DropIfExist";
+	private FlagSupport flags = new FlagSupport();
 	private String schema;
 	private String table;
 	private List<ColumnInfo> cols;
@@ -28,7 +32,8 @@ public class InitTable implements Init {
 	private PrimaryKey pk;
 	private Partitioning partitioning;
 
-	public InitTable(String schema, String table) {
+	public InitTable(boolean dropIfExist, String schema, String table) {
+		this.flags.set(DROP_IF_EXIST, dropIfExist);
 		this.schema = schema;
 		this.table = table;
 	}
@@ -67,13 +72,18 @@ public class InitTable implements Init {
 
 	@Override
 	public boolean init() {
-		return DB.instance().simpleExecute(String.format("DROP TABLE IF EXISTS `%s`.`%s`", schema, table), 0)
-				&& DB.instance().simpleExecute(new SQLBuilder(schema, table).createTable(cols, pk, indexes, partitioning), 0);
+		Suc suc = new Suc();
+		flags.flagDo((params) -> {
+			return suc.val(DB.instance().simpleExecute(String.format("DROP TABLE IF EXISTS `%s`.`%s`", schema, table), 0));
+		});
+		return suc.val()
+			&& DB.instance().simpleExecute(new SQLBuilder(schema, table).createTable(cols, pk, indexes, partitioning), 0);
 	}
 
 	@Override
 	public String toString() {
-		return new SQLBuilder(schema, table).createTable(cols, pk, indexes, partitioning);
+		String sql = new SQLBuilder(schema, table).createTable(cols, pk, indexes, partitioning);
+		return String.format("SQL=[%s].", sql);
 	}
 
 }

@@ -16,7 +16,6 @@ import java.util.List;
 public final class Partitioning {
 
 	public static enum PartitionBy {
-
 		range,
 		hash;
 	}
