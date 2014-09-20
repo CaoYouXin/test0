@@ -17,9 +17,9 @@ import db.sql.SQLBuilder;
  */
 public class InitData extends Init {
 
-	protected String schema, table;
-	protected String[] columns;
-	protected List<Object[]> data;
+	private String schema, table;
+	private String[] columns;
+	private List<Object[]> data;
 
 	public InitData(String schema, String table, String... columns) {
 		this.schema = schema;
