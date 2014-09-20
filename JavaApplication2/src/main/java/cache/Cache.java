@@ -13,14 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import shutdown.BeforeShutdown;
 
-
 /**
  *
  * @author CPU
  *
- * 没办法处理强行关机等异常情况。。。所以建议构建Cache时，count为1。 也就是说，这里只做读缓存。。。。。
+ *         没办法处理强行关机等异常情况。。。所以建议构建Cache时，count为1。 也就是说，这里只做读缓存。。。。。
  *
- * 唉，还是不要异步更新数据库了，反正不做写缓存，就同步更新数据库吧
+ *         唉，还是不要异步更新数据库了，反正不做写缓存，就同步更新数据库吧
  */
 public final class Cache<K, V> implements BeforeShutdown {
 
@@ -35,10 +34,10 @@ public final class Cache<K, V> implements BeforeShutdown {
 		boolean isPut;
 		V value;
 
-		public Modification(boolean isPut, V value) {
-			this.isPut = isPut;
-			this.value = value;
-		}
+		// public Modification(boolean isPut, V value) {
+		// this.isPut = isPut;
+		// this.value = value;
+		// }
 
 	}
 
@@ -46,12 +45,12 @@ public final class Cache<K, V> implements BeforeShutdown {
 
 		Map<K, Modification> mods = new ConcurrentHashMap<>();
 
-		public synchronized void addModification(K key, Modification mod) {
-			mods.put(key, mod);
-			if (maxModCache <= mods.size()) {
-				syncToDB();
-			}
-		}
+		// public synchronized void addModification(K key, Modification mod) {
+		// mods.put(key, mod);
+		// if (maxModCache <= mods.size()) {
+		// syncToDB();
+		// }
+		// }
 
 		void syncToDB() {
 			Map<K, Modification> toMods = mods;
@@ -71,7 +70,7 @@ public final class Cache<K, V> implements BeforeShutdown {
 
 	}
 
-	private int maxModCache;
+	// private int maxModCache;
 	private Synchronizer<K, V> synchronizer;
 	private Map<K, V> data = new ConcurrentHashMap<>();
 	private Modifications mods = new Modifications();
@@ -82,7 +81,7 @@ public final class Cache<K, V> implements BeforeShutdown {
 	}
 
 	private Cache(int maxModCache, Synchronizer<K, V> synchronizer) {
-		this.maxModCache = maxModCache;
+		// this.maxModCache = maxModCache;
 		this.synchronizer = synchronizer;
 	}
 
@@ -150,5 +149,5 @@ public final class Cache<K, V> implements BeforeShutdown {
 		}
 		return data.entrySet();
 	}
-	
+
 }
