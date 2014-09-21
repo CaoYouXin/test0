@@ -23,9 +23,13 @@ import javax.sql.DataSource;
  *
  * @author CPU
  *
- * 关系数据库操作类： 1、普通查询：参数必须是不含占位符的字符串 2、带占位符的查询：参数可以是String(sql)，Object... 3、普通增删改：参数同样必须是String(sql)
- * 4、带占位符的增删改：参数可以是String(sql)，Object... 注：Object...需要通过instanceof检测，代换成合适的字符串
- * 另注：Object的类型除包括char之外的七大类型外，还对java.util.Date类型做了特殊处理， 替换成了long，其余各种类型，都调用toString方法
+ * 关系数据库操作类： 
+ * @1、普通查询：参数必须是不含占位符的字符串 
+ * @2、带占位符的查询：参数可以是String(sql)，Object... 
+ * @3、普通增删改：参数同样必须是String(sql)
+ * @4、带占位符的增删改：参数可以是String(sql)，Object... 
+ * @注：Object...需要通过instanceof检测，代换成合适的字符串
+ * @另注：Object的类型除包括char之外的七大类型外，还对java.util.Date类型做了特殊处理， 替换成了long，其余各种类型，都调用toString方法
  */
 public final class DB {
 
