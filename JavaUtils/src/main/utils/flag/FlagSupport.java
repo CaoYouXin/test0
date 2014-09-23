@@ -5,7 +5,7 @@ import static utils.StringUtils.Md5;
 import java.util.HashMap;
 import java.util.Map;
 
-import utils.GeneralFn;
+import utils.fn.VoidReturnFn;
 
 public class FlagSupport {
 
@@ -38,7 +38,7 @@ public class FlagSupport {
 	 * fn的参数数组的长度为1,类型是String，即flag name.
 	 * @param fn
 	 */
-	public final void flagDo(GeneralFn fn) {
+	public final void flagDo(VoidReturnFn<String> fn) {
 		this.flags.forEach((String name, Boolean b) -> {
 			if (b) {
 				fn.fn(name);

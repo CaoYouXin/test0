@@ -74,7 +74,7 @@ public class InitTable extends Init {
 	public boolean init() {
 		Suc suc = new Suc();
 		flags.flagDo((params) -> {
-			return suc.val(DB.instance().simpleExecute(String.format("DROP TABLE IF EXISTS `%s`.`%s`", schema, table), 0));
+			suc.val(DB.instance().simpleExecute(String.format("DROP TABLE IF EXISTS `%s`.`%s`", schema, table), 0));
 		});
 		return suc.val()
 			&& DB.instance().simpleExecute(new SQLBuilder(schema, table).createTable(cols, pk, indexes, partitioning), 0);

@@ -5,6 +5,8 @@
  */
 package utils;
 
+import utils.fn.NullParamFn;
+
 /**
  *
  * @author CPU
@@ -28,12 +30,11 @@ public final class Suc {
 		return this.suc = suc;
 	}
 
-	public Object success(GeneralFn fn) {
-		int i = 0, j =1;
-		return this.suc ? fn.fn(i, j) : null;
+	public Object success(NullParamFn<? extends Object> fn) {
+		return this.suc ? fn.fn() : null;
 	}
 
-	public Object fail(GeneralFn fn) {
+	public Object fail(NullParamFn<? extends Object> fn) {
 		return !this.suc ? fn.fn() : null;
 	}
 	

@@ -38,7 +38,7 @@ public abstract class Init implements Script {
 			} else {
 				sucOnce.val(init.init());
 			}
-			sucOnce.success((params) -> {
+			sucOnce.success(() -> {
 				return errors.add(init);
 			});
 		});

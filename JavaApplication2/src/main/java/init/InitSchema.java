@@ -29,7 +29,7 @@ public class InitSchema extends Init {
 	public boolean init() {
 		Suc suc = new Suc();
 		flags.flagDo((params) -> {
-			return suc.val(DB.instance().simpleExecute(String.format("drop database if exists `%s`", schema), 0));
+			suc.val(DB.instance().simpleExecute(String.format("drop database if exists `%s`", schema), 0));
 		});
 		return suc.val() && DB.instance().simpleExecute(new SQLBuilder(schema, null).createSchema(), 1);
 	}
