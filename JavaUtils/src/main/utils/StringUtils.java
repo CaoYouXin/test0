@@ -32,6 +32,9 @@ public class StringUtils {
     }
 
     public static String join(List<? extends Object> os, String seprator) {
+    	if (null == os) {
+    		return "";
+    	}
         StringBuilder sb = new StringBuilder();
         os.stream().forEach((Object o) -> {
             sb.append(seprator).append(o.toString());
@@ -40,6 +43,9 @@ public class StringUtils {
     }
 
     public static String wrap(List<String> list) {
+    	if (null == list) {
+    		return "";
+    	}
         StringBuilder sb = new StringBuilder();
         list.stream().forEach((string) -> {
             sb.append(",`").append(string).append('`');
