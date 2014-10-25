@@ -17,6 +17,27 @@ public class InitManager {
 	private InitManager(){
 	}
 	
+	public static <K, V> Map<K, V> init(String rPath, Class<K> keyType, Class<V> valueType) throws URISyntaxException, IOException {
+		Map<K, V> hashMap = new HashMap<>();
+		init0(rPath, valueType, hashMap);
+//		init1(rPath, valueType, hashMap);
+		return hashMap;
+	}
+	
+	private static <K, V> void init1(String rPath, Class<V> valueType,
+			Map<K, V> hashMap) {
+		Package pkg = valueType.getPackage();
+		System.out.println(pkg.getName());
+		
+		pkg = Package.getPackage(pkg.getName() + '.' + rPath);
+		System.out.println(pkg.getName());
+		
+//		Class<?>[] classes = valueType.
+//		for (Class<?> klass : classes) {
+//			System.out.println(klass.getName());
+//		}
+	}
+	
 	/**
 	 * 目前不支持，初始化jar包里的类
 	 * @param rPath
@@ -26,8 +47,8 @@ public class InitManager {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	public static <K, V> Map<K, V> init(String rPath, Class<K> keyType, Class<V> valueType) throws URISyntaxException, IOException {
-		Map<K, V> hashMap = new HashMap<>();
+	private static <K, V> void init0(String rPath, Class<V> valueType,
+			Map<K, V> hashMap) throws URISyntaxException, IOException {
 		URL resource = valueType.getResource(rPath);
 		Path path = Paths.get(resource.toURI());
 		Files.find(path, 2, new BiPredicate<Path, BasicFileAttributes>() {
@@ -68,7 +89,6 @@ public class InitManager {
 				}
 			}
 		});
-		return hashMap;
 	}
 	
 	private static String getClassName(String tester, Path path, String pkgName) {
