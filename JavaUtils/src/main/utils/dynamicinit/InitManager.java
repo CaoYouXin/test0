@@ -17,6 +17,15 @@ public class InitManager {
 	private InitManager(){
 	}
 	
+	/**
+	 * 目前不支持，初始化jar包里的类
+	 * @param rPath
+	 * @param keyType
+	 * @param valueType
+	 * @return
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
 	public static <K, V> Map<K, V> init(String rPath, Class<K> keyType, Class<V> valueType) throws URISyntaxException, IOException {
 		Map<K, V> hashMap = new HashMap<>();
 		URL resource = valueType.getResource(rPath);
