@@ -6,21 +6,69 @@
 
 package utils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 /**
  * @desc 把一句if语句包装在一个类中，顺便用一下lambda表达式。
  * @author caolisheng
  */
 public class Debugger {
 
-	private static final boolean isDebugging = true;
-
 	public interface DoDebug {
 		void debug();
 	}
 
 	public static void debug(DoDebug fn) {
-		if (isDebugging)
+		if (isDebugging())
 			fn.debug();
+	}
+
+	private static boolean isDebugging() {
+		Exception hack = new Exception();
+		StackTraceElement[] stackTrace = hack.getStackTrace();
+		for (StackTraceElement stackTraceElement : stackTrace) {
+			Class<?> mainClass = null;
+			try {
+				mainClass = Class.forName(stackTraceElement.getClassName());
+			} catch (ClassNotFoundException e) {
+//				e.printStackTrace();
+				return false;
+			}
+			Method mainMethod = null;
+			try {
+				mainMethod = mainClass.getMethod("main", String[].class);
+			} catch (NoSuchMethodException e) {
+//				e.printStackTrace();
+				continue;
+			} catch (SecurityException e) {
+//				e.printStackTrace();
+				return false;
+			}
+			if (null != mainMethod) {
+				Field debuggingField;
+				try {
+					debuggingField = mainClass.getField("debugging");
+				} catch (NoSuchFieldException e) {
+//					e.printStackTrace();
+					continue;
+				} catch (SecurityException e) {
+//					e.printStackTrace();
+					return false;
+				}
+				if (null != debuggingField) {
+					try {
+						return debuggingField.getBoolean(mainClass);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+//						e.printStackTrace();
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	public static void debug(DebugType dt, DoDebug fn) {
