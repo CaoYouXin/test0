@@ -16,7 +16,13 @@ public class ArgsBoot {
 				System.out.println(String.format("arg[%d] is %s", index++, arg));
 			}
 		});
-		load(Arrays.asList(args[0]));//load boot commands
+		String string = args[0];
+		if ("reload".equalsIgnoreCase(string)) {
+			reload(Arrays.copyOfRange(args, 1, args.length));// reload commands
+			return;
+		} else {
+			load(Arrays.asList(string));//load boot commands
+		}
 		new OneCall(Arrays.asList(Arrays.copyOfRange(args, 1, args.length))).call();
 	}
 	
