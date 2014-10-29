@@ -16,6 +16,10 @@ public class Module implements KeyIdentifier<String> {
 	
 	private String name;
 	
+	Module(String name) {
+		this.name = name;
+	}
+	
 	@Override
 	public String key() {
 		return this.name;

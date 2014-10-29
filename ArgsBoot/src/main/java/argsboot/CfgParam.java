@@ -1,18 +1,20 @@
 package argsboot;
 
+import java.util.List;
+
 
 public class CfgParam {
 	
-	private String[] params;
+	private List<String> params;
 	private CommandHandler handler;
 	
-	CfgParam(String[] params, CommandHandler handler) {
+	CfgParam(List<String> params, CommandHandler handler) {
 		super();
 		this.params = params;
 		this.handler = handler;
 	}
 
-	public String[] getParams() {
+	public List<String> getParams() {
 		return params;
 	}
 

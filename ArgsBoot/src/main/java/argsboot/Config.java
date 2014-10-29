@@ -1,5 +1,7 @@
 package argsboot;
 
+import java.util.List;
+
 @StaticData
 public class Config {
 
@@ -8,7 +10,7 @@ public class Config {
 	Config() {
 	}
 
-	public void cfg(String[] params, CommandHandler handler) {
+	public void cfg(List<String> params, CommandHandler handler) {
 		if (null == this.handler) {
 			throw new LackOfHandlerException();
 		}

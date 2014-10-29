@@ -4,11 +4,11 @@
 package argsboot;
 
 /**
- * 静态配置实体类
+ * 运行时数据类
  * 
  * @author caoyouxin
- * 
+ *
  */
-public @interface StaticData {
+public @interface RuntimeData {
 
 }

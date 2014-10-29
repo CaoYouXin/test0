@@ -1,15 +1,37 @@
 package argsboot;
 
+import java.util.List;
+
 /**
  * argsboot中一次调用的运行时对象。
  * @author caoyouxin
  *
  */
+@RuntimeData
 public class OneCall {
 
-	public String call() {
-		// TODO Auto-generated method stub
-		return null;
+	private List<String> moduleChain;
+	private String commandName;
+	private List<String> configNames;
+	private List<List<String>> configParams;
+	private List<String> commandParams;
+	
+	OneCall(String[] args) {
+		
+	}
+	
+	String call() {
+		Module module = Modules.getRootModuleByChain(moduleChain);
+		if (null == module) {
+			throw new NullModuleException();
+		}
+		
+		Command command = module.getCommand(commandName);
+		if (null == command) {
+			throw new NullCommandException();
+		}
+		
+		return command.cmd(configNames, configParams, commandParams);
 	}
 
 }

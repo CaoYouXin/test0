@@ -1,6 +1,7 @@
 package argsboot;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @StaticData
@@ -20,9 +21,13 @@ public class Command {
 		return this;
 	}
 	
-	public String cmd(String[] configs, String[][] cfgParams, String[] params) {
+	public String cmd(List<String> configs, List<List<String>> cfgParams, List<String> params) {
 		if (null == this.handler) {
 			throw new LackOfHandlerException();
+		}
+
+		if (configs.size() != cfgParams.size()) {
+			throw new LackOfParamsException();
 		}
 		
 		int index = 0;
@@ -31,7 +36,7 @@ public class Command {
 			if (null == config) {
 				System.err.println(String.format("lack of config, %s", cfg));
 			}
-			config.cfg(cfgParams[index++], handler);
+			config.cfg(cfgParams.get(index++), handler);
 		}
 		
 		return this.handler.fn(params);
