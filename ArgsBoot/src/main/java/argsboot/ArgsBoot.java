@@ -46,7 +46,7 @@ public class ArgsBoot {
 	 * @return 加载过程是否完成
 	 */
 	public static boolean reload(String... moduleChain) {
-		return false;
+		throw new Error("Unimplemented method invoked!");
 	}
 	
 }
