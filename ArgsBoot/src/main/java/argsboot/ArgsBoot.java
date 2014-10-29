@@ -17,13 +17,10 @@ public class ArgsBoot {
 			}
 		});
 		load(Arrays.asList(args[0]));//load boot commands
-		int length = args.length - 1;
-		String[] realArgs = new String[length];
-		System.arraycopy(args, 1, realArgs, 0, length);
-		new OneCall(realArgs).call();
+		new OneCall(Arrays.asList(Arrays.copyOfRange(args, 1, args.length))).call();
 	}
 	
-	public static <R> R call(String[] args, CompletedHandler<R> handler) {
+	public static <R> R call(List<String> args, CompletedHandler<R> handler) {
 		OneCall theCall = new OneCall(args);
 		String result = theCall.call();
 		if (null != handler) {

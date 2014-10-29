@@ -16,7 +16,7 @@ public class OneCall {
 	private List<List<String>> configParams;
 	private List<String> commandParams;
 	
-	OneCall(String[] args) {
+	OneCall(List<String> args) {
 		
 	}
 	
