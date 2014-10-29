@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import utils.Debugger;
+import utils.StringUtils;
 
 public class ArgsBoot {
 
@@ -45,6 +46,15 @@ public class ArgsBoot {
 	 * @return 加载过程是否完成
 	 */
 	public static boolean load(List<String> paths, String... moduleChain) {
+		Module loadingModule = Modules.getRootModuleByChain(Arrays.asList(moduleChain));
+		if (null != loadingModule) {
+			loadingModule = Modules.createChain(Arrays.asList(moduleChain));
+		}
+		
+		String modulePrefix = StringUtils.join(moduleChain, ".");
+		for (String path : paths) {
+			
+		}
 		return false;
 	}
 	

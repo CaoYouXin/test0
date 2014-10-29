@@ -39,7 +39,18 @@ public class StringUtils {
         os.stream().forEach((Object o) -> {
             sb.append(seprator).append(o.toString());
         });
-        return sb.length() > 0 ? sb.substring(1) : "";
+        return sb.length() > 0 ? sb.substring(seprator.length()) : "";
+    }
+
+    public static String join(String[] ss, String seprator) {
+    	if (null == ss) {
+    		return "";
+    	}
+        StringBuilder sb = new StringBuilder();
+        for (String s : ss) {
+            sb.append(seprator).append(s);
+        }
+        return sb.length() > 0 ? sb.substring(seprator.length()) : "";
     }
 
     public static String wrap(List<String> list) {
