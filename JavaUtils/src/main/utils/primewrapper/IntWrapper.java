@@ -20,4 +20,9 @@ public class IntWrapper {
 		return this;
 	}
 	
+	public IntWrapper inc(int inc) {
+		this.i += inc;
+		return this;
+	}
+	
 }

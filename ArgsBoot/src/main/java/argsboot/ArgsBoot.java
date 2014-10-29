@@ -7,15 +7,9 @@ import utils.Debugger;
 
 public class ArgsBoot {
 
-	public static boolean debugging = false;
+	public static boolean debugging = true;
 	
 	public static void main(String[] args) {
-		Debugger.debug(() -> {
-			int index = 0;
-			for (String arg : args) {
-				System.out.println(String.format("arg[%d] is %s", index++, arg));
-			}
-		});
 		String string = args[0];
 		if ("reload".equalsIgnoreCase(string)) {
 			reload(Arrays.copyOfRange(args, 1, args.length));// reload commands
@@ -23,7 +17,15 @@ public class ArgsBoot {
 		} else {
 			load(Arrays.asList(string));//load boot commands
 		}
-		new OneCall(Arrays.asList(Arrays.copyOfRange(args, 1, args.length))).call();
+		OneCall theCall = new OneCall(Arrays.asList(Arrays.copyOfRange(args, 1, args.length)));
+		Debugger.debug(() -> {
+			int index = 0;
+			for (String arg : args) {
+				System.out.println(String.format("arg[%d] is %s", index++, arg));
+			}
+			System.out.println(theCall.toString());
+		});
+//		theCall.call();
 	}
 	
 	public static <R> R call(List<String> args, CompletedHandler<R> handler) {
