@@ -5,7 +5,7 @@ import java.util.List;
 @RuntimeData
 public class Modules {
 
-	private static Modules instance = new Modules();
+	private static final Modules instance = new Modules();
 	
 	private Modules() {
 	}

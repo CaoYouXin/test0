@@ -37,6 +37,9 @@ public class OneCall {
 			}
 			if (arg.startsWith("-")) {
 				if (module.val()) {
+					if (null == this.moduleChain) {
+						throw new NullModuleException();
+					}
 					this.commandName = this.moduleChain.remove(this.moduleChain.size() - 1);
 					module.val(false);
 				}
@@ -64,6 +67,9 @@ public class OneCall {
 			this.moduleChain.add(arg);
 		});
 		if (module.val()) {
+			if (null == this.moduleChain) {
+				throw new NullModuleException();
+			}
 			this.commandName = this.moduleChain.remove(this.moduleChain.size() - 1);
 		}
 	}
