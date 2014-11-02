@@ -5,13 +5,22 @@ import java.util.List;
 @RuntimeData
 public class Modules {
 
-	private static Module root = new Module("");
+	private static Modules instance = new Modules();
 	
-	static Module getRootModule() {
+	private Modules() {
+	}
+
+	public static synchronized Modules val() {
+		return instance;
+	}
+	
+	private Module root = new Module("");
+	
+	private Module getRootModule() {
 		return root;
 	}
 	
-	static Module getRootModuleByChain(List<String> chain) {
+	public Module getRootModuleByChain(List<String> chain) {
 		int index = 0, size = chain.size();
 		Module module = getRootModule();
 		while(null != module && index < size) {
@@ -20,7 +29,7 @@ public class Modules {
 		return module;
 	}
 
-	static Module createChain(List<String> chain) {
+	public Module createChain(List<String> chain) {
 		int index = 0, size = chain.size();
 		Module module = getRootModule();
 		while(index < size) {

@@ -2,21 +2,25 @@ package argsboot;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import utils.Debugger;
-import utils.StringUtils;
 
 public class ArgsBoot {
 
 	public static boolean debugging = true;
 	
+	/**
+	 * 命令行启动时调用
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		String string = args[0];
 		if ("reload".equalsIgnoreCase(string)) {
-			reload(Arrays.copyOfRange(args, 1, args.length));// reload commands
+//			reload(Arrays.copyOfRange(args, 1, args.length));// reload commands
 			return;
 		} else {
-			load(Arrays.asList(string));//load boot commands
+//			load(Arrays.asList(string));//load boot commands
 		}
 		OneCall theCall = new OneCall(Arrays.asList(Arrays.copyOfRange(args, 1, args.length)));
 		Debugger.debug(() -> {
@@ -29,6 +33,12 @@ public class ArgsBoot {
 //		theCall.call();
 	}
 	
+	/**
+	 * 程序中调用
+	 * @param args
+	 * @param handler
+	 * @return
+	 */
 	public static <R> R call(List<String> args, CompletedHandler<R> handler) {
 		OneCall theCall = new OneCall(args);
 		String result = theCall.call();
@@ -41,30 +51,31 @@ public class ArgsBoot {
 
 	/**
 	 * 加载命令
+	 * @param loader loader具有以下要求
+	 * @1 如果没有则创建 moduleChain 的 module，如果存在则先清空为只有根节点的子树
+	 * @2 加载 module 为根的子树中所有的 command，这个过程中可能创建若干节点
 	 * @param paths 单纯的文件路径的集合（可以是文件夹或者jar包）
 	 * @param moduleChain 起到过滤和加锁的作用
 	 * @return 加载过程是否完成
 	 */
-	public static boolean load(List<String> paths, String... moduleChain) {
-		Module loadingModule = Modules.getRootModuleByChain(Arrays.asList(moduleChain));
-		if (null != loadingModule) {
-			loadingModule = Modules.createChain(Arrays.asList(moduleChain));
-		}
-		
-		String modulePrefix = StringUtils.join(moduleChain, ".");
-		for (String path : paths) {
-			
-		}
-		return false;
+	public static boolean load(Loader loader, Set<String> paths, String... moduleChain) {
+		return loader.load(paths, moduleChain, Modules.val()) ? updatePathsCache(paths, moduleChain) : false;
 	}
 	
+	private static boolean updatePathsCache(Set<String> paths, String[] moduleChain) {
+		Modules.val().getRootModuleByChain(Arrays.asList(moduleChain)).updatePaths(paths);
+		return false;
+	}
+
 	/**
 	 * 重新加载命令，之前的丢弃掉
+	 * @param loader 详见 load 方法中的 loader
 	 * @param moduleChain 起到过滤和加锁的作用
 	 * @return 加载过程是否完成
 	 */
-	public static boolean reload(String... moduleChain) {
-		throw new Error("Unimplemented method invoked!");
+	public static boolean reload(Loader loader, String... moduleChain) {
+		Module module = Modules.val().getRootModuleByChain(Arrays.asList(moduleChain));
+		return loader.isReloadSupported() ? loader.load(module.getPaths(), moduleChain, Modules.val()) : false;
 	}
 	
 }

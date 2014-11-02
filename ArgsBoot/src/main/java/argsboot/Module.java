@@ -12,6 +12,7 @@ import utils.dynamicinit.KeyIdentifier;
 public class Module implements KeyIdentifier<String> {
 
 	private Set<Module> subModules;
+	private Set<String> paths; // 绑定的路径，只增不减
 	private Map<String, Command> commands;
 	
 	private String name;
@@ -25,11 +26,11 @@ public class Module implements KeyIdentifier<String> {
 		return this.name;
 	}
 	
-	boolean hasSubModules() {
+	public boolean hasSubModules() {
 		return null != this.subModules;
 	}
 	
-	Module getSubMoule(String name) {
+	public Module getSubMoule(String name) {
 		if (StringUtils.isEmpty(name) || !hasSubModules()) {
 			return null;
 		}
@@ -41,7 +42,7 @@ public class Module implements KeyIdentifier<String> {
 		return null;
 	}
 	
-	Module addSubModule(Module module) {
+	public Module addSubModule(Module module) {
 		if (null == module) {
 			return this;
 		}
@@ -52,7 +53,7 @@ public class Module implements KeyIdentifier<String> {
 		return this;
 	}
 	
-	Module removeSubModule(Module module) {
+	public Module removeSubModule(Module module) {
 		if (null == this.subModules || null == module) {
 			return this;
 		}
@@ -62,8 +63,14 @@ public class Module implements KeyIdentifier<String> {
 		return this;
 	}
 	
-
-	boolean hasCommands() {
+	public boolean clearSubModules() {
+		if (this.hasSubModules()) {
+			this.subModules.clear();
+		}
+		return true;
+	}
+	
+	public boolean hasCommands() {
 		return null != this.commands;
 	}
 	
@@ -74,7 +81,7 @@ public class Module implements KeyIdentifier<String> {
 		return this.commands.get(name);
 	}
 	
-	Module addCommand(String name, Command module) {
+	public Module addCommand(String name, Command module) {
 		if (StringUtils.isEmpty(name)) {
 			return this;
 		}
@@ -85,7 +92,7 @@ public class Module implements KeyIdentifier<String> {
 		return this;
 	}
 	
-	Module removeCommand(String name) {
+	public Module removeCommand(String name) {
 		if (null == this.commands || StringUtils.isEmpty(name)) {
 			return this;
 		}
@@ -93,6 +100,27 @@ public class Module implements KeyIdentifier<String> {
 			this.commands = null;
 		}
 		return this;
+	}
+
+	public boolean clearCommands() {
+		if (this.hasCommands()) {
+			this.commands.clear();
+		}
+		return true;
+	}
+	
+	Set<String> getPaths() {
+		if (null == this.paths) {
+			this.paths = new HashSet<>();
+		}
+		return paths;
+	}
+
+	void updatePaths(Set<String> paths) {
+		if (null == this.paths) {
+			this.paths = new HashSet<>();
+		}
+		this.paths.addAll(paths);
 	}
 	
 }

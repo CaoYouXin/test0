@@ -32,12 +32,6 @@ public class OneCall {
 				return;
 			}
 			if (cfgParams.val() && !arg.startsWith("-")) {
-				if (null == this.configParams) {
-					this.configParams = new ArrayList<>();
-				}
-				if (configIndex.val() >= this.configParams.size()) {
-					this.configParams.add(configIndex.val(), new ArrayList<>());
-				}
 				this.configParams.get(configIndex.val()).add(arg);
 				return;
 			}
@@ -54,6 +48,12 @@ public class OneCall {
 					}
 					this.configNames.add(arg.substring(1, arg.length()));
 					configIndex.inc(1);
+					if (null == this.configParams) {
+						this.configParams = new ArrayList<>();
+					}
+					if (configIndex.val() >= this.configParams.size()) {
+						this.configParams.add(configIndex.val(), new ArrayList<>());
+					}
 					cfgParams.val(true);
 				}
 				return;
@@ -69,7 +69,7 @@ public class OneCall {
 	}
 	
 	String call() {
-		Module module = Modules.getRootModuleByChain(moduleChain);
+		Module module = Modules.val().getRootModuleByChain(moduleChain);
 		if (null == module) {
 			throw new NullModuleException();
 		}
