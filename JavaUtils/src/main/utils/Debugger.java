@@ -20,20 +20,24 @@ public class Debugger {
 	}
 
 	public static void debug(DoDebug fn) {
-		if (isDebugging())
+        System.out.println(isDebugging());
+		if (isDebugging() > 0)
 			fn.debug();
 	}
 
-	private static boolean isDebugging() {
+	private static int isDebugging() {
 		Exception hack = new Exception();
 		StackTraceElement[] stackTrace = hack.getStackTrace();
 		for (StackTraceElement stackTraceElement : stackTrace) {
 			Class<?> mainClass = null;
 			try {
-				mainClass = Class.forName(stackTraceElement.getClassName());
+                String className = stackTraceElement.getClassName();
+                System.out.println(className);
+				mainClass = Class.forName(className);
 			} catch (ClassNotFoundException e) {
 //				e.printStackTrace();
-				return false;
+//                return -1;
+				continue; // lambda表达式生成的类命名比较诡异，反射不粗来。
 			}
 			Method mainMethod = null;
 			try {
@@ -43,7 +47,7 @@ public class Debugger {
 				continue;
 			} catch (SecurityException e) {
 //				e.printStackTrace();
-				return false;
+				return -2;
 			}
 			if (null != mainMethod) {
 				Field debuggingField;
@@ -54,21 +58,21 @@ public class Debugger {
 					continue;
 				} catch (SecurityException e) {
 //					e.printStackTrace();
-					return false;
+					return -3;
 				}
 				if (null != debuggingField) {
 					try {
-						return debuggingField.getBoolean(mainClass);
+						return debuggingField.getBoolean(mainClass) ? 1 : 0;
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 //						e.printStackTrace();
-						return false;
+						return -4;
 					}
 				} else {
-					return false;
+					return -5;
 				}
 			}
 		}
-		return true;
+		return 1;
 	}
 
 	public static void debug(DebugType dt, DoDebug fn) {
