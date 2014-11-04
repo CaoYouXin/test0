@@ -38,14 +38,14 @@ public class ArgsBoot {
 			connectToALoaderServer(args[1], Integer.valueOf(args[2]));
 			return;
 		} else {
-			if ("default".equalsIgnoreCase(args[1])) {
+			if ("default".equalsIgnoreCase(args[0])) {
 				LOADER = (Loader) Class.forName("argsboot.loader.DefaultLoader").newInstance();
 			} else {
-				LOADER = (Loader) Class.forName(args[1]).newInstance();
+				LOADER = (Loader) Class.forName(args[0]).newInstance();
 			}
-			load(ArrayUtils.asSet(args[2]));
+			load(ArrayUtils.asSet(args[1]));
 		}
-		OneCall theCall = new OneCall(Arrays.asList(Arrays.copyOfRange(args, 3, args.length)));
+		OneCall theCall = new OneCall(Arrays.asList(Arrays.copyOfRange(args, 2, args.length)));
 		Debugger.debug(() -> {
 			int index = 0;
 			for (String arg : args) {

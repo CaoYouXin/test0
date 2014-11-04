@@ -20,7 +20,7 @@ public class Debugger {
 	}
 
 	public static void debug(DoDebug fn) {
-        System.out.println(isDebugging());
+//        System.out.println(isDebugging());
 		if (isDebugging() > 0)
 			fn.debug();
 	}
@@ -32,7 +32,7 @@ public class Debugger {
 			Class<?> mainClass = null;
 			try {
                 String className = stackTraceElement.getClassName();
-                System.out.println(className);
+//                System.out.println(className);
 				mainClass = Class.forName(className);
 			} catch (ClassNotFoundException e) {
 //				e.printStackTrace();
