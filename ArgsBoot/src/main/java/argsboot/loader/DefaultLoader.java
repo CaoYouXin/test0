@@ -32,22 +32,22 @@ public class DefaultLoader implements Loader {
                 File[] file = path.toFile().listFiles();
                 System.out.println(file.length);
 			});
-//			try {
-//				Files.find(path, Integer.MAX_VALUE, (Path t, BasicFileAttributes u) -> {
-//					if (u.isDirectory()) {
-//						return false;
-//					}
-//					return true;
-//				}).forEach((p) -> {
-//					if (p.endsWith("class")) {
-//
-//                    } else if (p.endsWith("jar")) {
-//
-//                    }
-//				});
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
+			try {
+				Files.find(path, Integer.MAX_VALUE, (Path t, BasicFileAttributes u) -> {
+					if (u.isDirectory()) {
+						return false;
+					}
+					return true;
+				}).forEach((p) -> {
+					if (p.endsWith("class")) {
+                        
+                    } else if (p.endsWith("jar")) {
+
+                    }
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		});
 		return false;
 	}
