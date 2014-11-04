@@ -10,7 +10,10 @@ import utils.Debugger;
 public class ArgsBoot {
 
 	public static final boolean debugging = true;
+	
 	public static final String TO_BE_CONTINUED = "#to be continued...#";
+	
+	private static Loader LOADER = null;
 	
 	/**
 	 * 命令行启动时调用
@@ -35,8 +38,12 @@ public class ArgsBoot {
 			connectToALoaderServer(args[1], Integer.valueOf(args[2]));
 			return;
 		} else {
-			Loader loader = (Loader) Class.forName(args[1]).newInstance();
-			load(loader, ArrayUtils.asSet(args[2]));
+			if ("default".equalsIgnoreCase(args[1])) {
+				LOADER = (Loader) Class.forName("argsboot.loader.DefaultLoader").newInstance();
+			} else {
+				LOADER = (Loader) Class.forName(args[1]).newInstance();
+			}
+			load(ArrayUtils.asSet(args[2]));
 		}
 		OneCall theCall = new OneCall(Arrays.asList(Arrays.copyOfRange(args, 3, args.length)));
 		Debugger.debug(() -> {
@@ -91,6 +98,10 @@ public class ArgsBoot {
 		return loader.load(paths, moduleChain, Modules.val()) ? updatePathsCache(paths, moduleChain) : false;
 	}
 	
+	public static boolean load(Set<String> paths, String... moduleChain) {
+		return (null != LOADER) ? load(LOADER, paths, moduleChain) : false;
+	}
+	
 	private static boolean updatePathsCache(Set<String> paths, String[] moduleChain) {
 		Modules.val().getRootModuleByChain(Arrays.asList(moduleChain)).updatePaths(paths);
 		return false;
@@ -105,6 +116,23 @@ public class ArgsBoot {
 	public static boolean reload(Loader loader, String... moduleChain) {
 		Module module = Modules.val().getRootModuleByChain(Arrays.asList(moduleChain));
 		return loader.isReloadSupported() ? loader.load(module.getPaths(), moduleChain, Modules.val()) : false;
+	}
+	
+	public static boolean reload(String... moduleChain) {
+		return (null != LOADER) ? reload(LOADER, moduleChain) : false;
+	}
+	
+	/**
+	 * 设置加载器
+	 * @param loader
+	 * @return true：loader有效，且设置成功；false：loader为空，且设置失败
+	 */
+	public static synchronized boolean setLoader(Loader loader) {
+		if (null == loader) {
+			return false;
+		}
+		LOADER = loader;
+		return true;
 	}
 	
 }
