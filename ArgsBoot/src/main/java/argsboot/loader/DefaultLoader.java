@@ -1,5 +1,6 @@
 package argsboot.loader;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +29,8 @@ public class DefaultLoader implements Loader {
 			Path path = Paths.get(split[0], Arrays.copyOfRange(split, 1, split.length));
 			Debugger.debug(() -> {
 				System.out.println(path.toAbsolutePath().toString());
+                File[] file = path.toFile().listFiles();
+                System.out.println(file.length);
 			});
 //			try {
 //				Files.find(path, Integer.MAX_VALUE, (Path t, BasicFileAttributes u) -> {
