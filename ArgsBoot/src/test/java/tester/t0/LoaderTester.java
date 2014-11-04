@@ -1,3 +1,5 @@
+package tester.t0;
+
 import argsboot.Loader;
 import argsboot.Module;
 import argsboot.Modules;
