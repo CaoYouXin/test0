@@ -1,11 +1,11 @@
 package argsboot;
 
+import utils.ArrayUtils;
+import utils.Debugger;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-
-import utils.ArrayUtils;
-import utils.Debugger;
 
 public class ArgsBoot {
 
@@ -33,8 +33,9 @@ public class ArgsBoot {
 	 * @args[b+1..c] params
 	 * @endif
 	 */
-	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		if ("loader".equalsIgnoreCase(args[0])) {
+	public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+		System.out.println(System.getProperty("java.class.path"));
+        if ("loader".equalsIgnoreCase(args[0])) {
 			connectToALoaderServer(args[1], Integer.valueOf(args[2]));
 			return;
 		} else {
@@ -47,12 +48,12 @@ public class ArgsBoot {
 		}
 		OneCall theCall = new OneCall(Arrays.asList(Arrays.copyOfRange(args, 2, args.length)));
 		Debugger.debug(() -> {
-			int index = 0;
-			for (String arg : args) {
-				System.out.println(String.format("arg[%d] is %s", index++, arg));
-			}
-			System.out.println(theCall.toString());
-		});
+            int index = 0;
+            for (String arg : args) {
+                System.out.println(String.format("arg[%d] is %s", index++, arg));
+            }
+            System.out.println(theCall.toString());
+        });
 		String to_be_continued = theCall.call();
 		if (TO_BE_CONTINUED.equals(to_be_continued) && !"-1".equals(args[1])) {
 			establishALoaderServer(Integer.valueOf(args[1]));
