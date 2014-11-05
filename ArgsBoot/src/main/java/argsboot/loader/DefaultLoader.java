@@ -1,7 +1,7 @@
 package argsboot.loader;
 
 import argsboot.Loader;
-import argsboot.Modules;
+import argsboot.RuntimeHelper;
 import utils.Debugger;
 import utils.EnumerationUtils;
 
@@ -19,7 +19,7 @@ import java.util.jar.JarFile;
 public class DefaultLoader implements Loader {
 
 	@Override
-	public boolean load(Set<String> paths, String[] chain, Modules modules) {
+	public boolean load(Set<String> paths, String[] chain, RuntimeHelper runtimeHelper) {
 		paths.forEach((String more) -> {
 			String[] split = more.split("/");
 			Path path = Paths.get(split[0], (split.length < 2) ? new String[0] : Arrays.copyOfRange(split, 1, split.length));
@@ -42,7 +42,7 @@ public class DefaultLoader implements Loader {
                         String filename = relative.getName(lastIndex).toString();
                         sb.append(filename.substring(0, filename.length() - 6));
                         Debugger.debug(() -> System.out.println(sb.toString()));
-                        processWithClassName(sb.toString(), chain, modules);
+                        processWithClassName(sb.toString(), chain, runtimeHelper);
                     } else if (pAbsFullPathName.endsWith("jar")) {
                         JarFile jar = null;
                         try {
@@ -65,7 +65,7 @@ public class DefaultLoader implements Loader {
 		return false;
 	}
 
-    private void processWithClassName(String className, String[] chain, Modules modules) {
+    private void processWithClassName(String className, String[] chain, RuntimeHelper runtimeHelper) {
 
     }
 

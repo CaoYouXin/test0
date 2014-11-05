@@ -3,14 +3,14 @@ package argsboot;
 import java.util.List;
 
 @RuntimeData
-public class Modules {
+public class RuntimeHelper {
 
-	private static final Modules instance = new Modules();
+	private static final RuntimeHelper instance = new RuntimeHelper();
 	
-	private Modules() {
+	private RuntimeHelper() {
 	}
 
-	public static synchronized Modules val() {
+	public static synchronized RuntimeHelper val() {
 		return instance;
 	}
 	

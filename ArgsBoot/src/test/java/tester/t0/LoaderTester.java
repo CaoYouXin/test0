@@ -1,8 +1,7 @@
 package tester.t0;
 
 import argsboot.Loader;
-import argsboot.Module;
-import argsboot.Modules;
+import argsboot.RuntimeHelper;
 import argsboot.loader.DefaultLoader;
 import utils.ArrayUtils;
 
@@ -15,7 +14,7 @@ public class LoaderTester {
 
     public static void main(String[] args) {
         Loader loader = new DefaultLoader();
-        loader.load(ArrayUtils.asSet("a"), new String[0], Modules.val());
+        loader.load(ArrayUtils.asSet("a"), new String[0], RuntimeHelper.val());
     }
 
 }

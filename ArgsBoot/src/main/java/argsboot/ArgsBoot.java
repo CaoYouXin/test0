@@ -96,7 +96,7 @@ public class ArgsBoot {
 	 * @return 加载过程是否完成
 	 */
 	public static boolean load(Loader loader, Set<String> paths, String... moduleChain) {
-		return loader.load(paths, moduleChain, Modules.val()) ? updatePathsCache(paths, moduleChain) : false;
+		return loader.load(paths, moduleChain, RuntimeHelper.val()) ? updatePathsCache(paths, moduleChain) : false;
 	}
 	
 	public static boolean load(Set<String> paths, String... moduleChain) {
@@ -104,7 +104,7 @@ public class ArgsBoot {
 	}
 	
 	private static boolean updatePathsCache(Set<String> paths, String[] moduleChain) {
-		Modules.val().getRootModuleByChain(Arrays.asList(moduleChain)).updatePaths(paths);
+		RuntimeHelper.val().getRootModuleByChain(Arrays.asList(moduleChain)).updatePaths(paths);
 		return false;
 	}
 
@@ -115,8 +115,8 @@ public class ArgsBoot {
 	 * @return 加载过程是否完成
 	 */
 	public static boolean reload(Loader loader, String... moduleChain) {
-		Module module = Modules.val().getRootModuleByChain(Arrays.asList(moduleChain));
-		return loader.isReloadSupported() ? loader.load(module.getPaths(), moduleChain, Modules.val()) : false;
+		Module module = RuntimeHelper.val().getRootModuleByChain(Arrays.asList(moduleChain));
+		return loader.isReloadSupported() ? loader.load(module.getPaths(), moduleChain, RuntimeHelper.val()) : false;
 	}
 	
 	public static boolean reload(String... moduleChain) {
