@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 @StaticData
-public class Command {
+class Command {
 
 	private CommandHandler handler;
 	private Map<String, Config> configs;

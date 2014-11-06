@@ -9,7 +9,7 @@ import utils.StringUtils;
 import utils.dynamicinit.KeyIdentifier;
 
 @StaticData
-public class Module implements KeyIdentifier<String> {
+class Module implements KeyIdentifier<String> {
 
 	private Set<Module> subModules;
 	private Set<String> paths; // 绑定的路径，只增不减
@@ -30,7 +30,7 @@ public class Module implements KeyIdentifier<String> {
 		return null != this.subModules;
 	}
 	
-	Module getSubMoule(String name) {
+	Module getSubModule(String name) {
 		if (StringUtils.isEmpty(name) || !hasSubModules()) {
 			return null;
 		}

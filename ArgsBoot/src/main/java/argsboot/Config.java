@@ -3,7 +3,7 @@ package argsboot;
 import java.util.List;
 
 @StaticData
-public class Config {
+class Config {
 
 	private ConfigHandler handler;
 	

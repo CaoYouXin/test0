@@ -42,15 +42,15 @@ public class StringUtils {
         return sb.length() > 0 ? sb.substring(seprator.length()) : "";
     }
 
-    public static String join(String[] ss, String seprator) {
+    public static String join(String[] ss, String separator) {
     	if (null == ss) {
     		return "";
     	}
         StringBuilder sb = new StringBuilder();
         for (String s : ss) {
-            sb.append(seprator).append(s);
+            sb.append(separator).append(s);
         }
-        return sb.length() > 0 ? sb.substring(seprator.length()) : "";
+        return sb.length() > 0 ? sb.substring(separator.length()) : "";
     }
 
     public static String wrap(List<String> list) {

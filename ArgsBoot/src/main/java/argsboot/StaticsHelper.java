@@ -24,7 +24,7 @@ public class StaticsHelper {
 		int index = 0, size = chain.size();
 		Module module = getRootModule();
 		while(null != module && index < size) {
-			module = module.getSubMoule(chain.get(index++));
+			module = module.getSubModule(chain.get(index++));
 		}
 		return module;
 	}
@@ -34,10 +34,10 @@ public class StaticsHelper {
 		Module module = getRootModule();
 		while(index < size) {
 			String name = chain.get(index++);
-			if (null == module.getSubMoule(name)) {
+			if (null == module.getSubModule(name)) {
 				module.addSubModule(new Module(name));
 			}
-			module = module.getSubMoule(name);
+			module = module.getSubModule(name);
 		}
 		return module;
 	}

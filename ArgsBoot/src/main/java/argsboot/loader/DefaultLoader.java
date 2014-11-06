@@ -1,26 +1,30 @@
 package argsboot.loader;
 
+import argsboot.CommandHandler;
+import argsboot.ConfigHandler;
 import argsboot.Loader;
 import argsboot.StaticsHelper;
 import utils.Debugger;
 import utils.EnumerationUtils;
+import utils.StringUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class DefaultLoader implements Loader {
 
-	@Override
+    @Override
 	public boolean load(Set<String> paths, String[] chain, StaticsHelper staticsHelper) {
-		paths.forEach((String more) -> {
+        String prefix = StringUtils.join(chain, ".");
+        TmpStatics tmp = new TmpStatics();
+        paths.forEach((String more) -> {
 			String[] split = more.split("/");
 			Path path = Paths.get(split[0], (split.length < 2) ? new String[0] : Arrays.copyOfRange(split, 1, split.length));
             Debugger.debug(() -> System.out.println("now finding:" + path.toAbsolutePath().toString()));
@@ -41,7 +45,7 @@ public class DefaultLoader implements Loader {
                         String filename = relative.getName(lastIndex).toString();
                         sb.append(filename.substring(0, filename.length() - 6));
                         Debugger.debug(() -> System.out.println(sb.toString()));
-                        processWithClassName(sb.toString(), chain, staticsHelper);
+                        processWithClassName(sb.toString(), prefix, tmp);
                     } else if (pAbsFullPathName.endsWith("jar")) {
                         JarFile jar = null;
                         try {
@@ -53,7 +57,11 @@ public class DefaultLoader implements Loader {
                         while (entries.hasMoreElements()) {
                             JarEntry jarEntry = entries.nextElement();
                             Debugger.debug(() -> System.out.println(jarEntry.getName()));
-                            // TODO
+                            if (jarEntry.getName().endsWith("class")) {
+                                String className = jarEntry.getName().replace('/', '.');
+                                className = className.substring(0, className.length() - 6);
+                                processWithClassName(className, prefix, tmp);
+                            }
                         }
                     }
 				});
@@ -61,11 +69,61 @@ public class DefaultLoader implements Loader {
 				e.printStackTrace();
 			}
         });
-		return false;
+		return tmp.toReal(staticsHelper);
 	}
 
-    private void processWithClassName(String className, String[] chain, StaticsHelper staticsHelper) {
-
+    private void processWithClassName(String className, String prefix, TmpStatics tmpStatics) {
+        Class clazz = null;
+        Field id = null;
+        try {
+            clazz = Class.forName(className);
+            id = clazz.getField("ID");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            return;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            // TODO Log
+            return;
+        }
+        String identification = (null != id) ? id.getName() : "-1";
+        if (!identification.startsWith(prefix)) return;
+        int from = identification.indexOf(':');
+        String chain = identification.substring(0, from);
+        if (clazz.isAssignableFrom(CommandHandler.class)) {
+            String cmdName = identification.substring(from + 1);
+            CommandHandler commandHandler = null;
+            try {
+                commandHandler = (CommandHandler) clazz.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+                // TODO Log
+                return;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                // TODO Log
+                return;
+            }
+            tmpStatics.add(chain, cmdName, commandHandler);
+        }
+        if (clazz.isAssignableFrom(ConfigHandler.class)) {
+            int to = identification.indexOf(':', from);
+            String cmdName = identification.substring(from + 1, to);
+            String cfgName = identification.substring(to + 1);
+            ConfigHandler configHandler = null;
+            try {
+                configHandler = (ConfigHandler) clazz.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+                // TODO Log
+                return;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                // TODO Log
+                return;
+            }
+            tmpStatics.add(chain, cmdName, cfgName, configHandler);
+        }
     }
 
     @Override

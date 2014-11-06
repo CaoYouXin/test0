@@ -3,12 +3,12 @@ package argsboot;
 import java.util.List;
 
 
-public class CfgParam {
+public class CfgParam<CH extends CommandHandler> {
 	
 	private List<String> params;
-	private CommandHandler handler;
+	private CH handler;
 	
-	CfgParam(List<String> params, CommandHandler handler) {
+	CfgParam(List<String> params, CH handler) {
 		super();
 		this.params = params;
 		this.handler = handler;
@@ -18,7 +18,7 @@ public class CfgParam {
 		return params;
 	}
 
-	public CommandHandler getHandler() {
+	public CH getHandler() {
 		return handler;
 	}
 	
