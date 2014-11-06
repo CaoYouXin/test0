@@ -44,9 +44,9 @@ public class ArgsBoot {
 			} else {
 				LOADER = (Loader) Class.forName(args[0]).newInstance();
 			}
-			load(ArrayUtils.asSet(args[1]));
+			load(ArrayUtils.asSet(args[2]));
 		}
-		OneCall theCall = new OneCall(Arrays.asList(Arrays.copyOfRange(args, 2, args.length)));
+		OneCall theCall = new OneCall(Arrays.asList(Arrays.copyOfRange(args, 3, args.length)));
 		Debugger.debug(() -> {
             int index = 0;
             for (String arg : args) {
