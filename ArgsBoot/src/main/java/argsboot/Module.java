@@ -26,11 +26,11 @@ public class Module implements KeyIdentifier<String> {
 		return this.name;
 	}
 	
-	public boolean hasSubModules() {
+	boolean hasSubModules() {
 		return null != this.subModules;
 	}
 	
-	public Module getSubMoule(String name) {
+	Module getSubMoule(String name) {
 		if (StringUtils.isEmpty(name) || !hasSubModules()) {
 			return null;
 		}
@@ -42,7 +42,7 @@ public class Module implements KeyIdentifier<String> {
 		return null;
 	}
 	
-	public Module addSubModule(Module module) {
+	Module addSubModule(Module module) {
 		if (null == module) {
 			return this;
 		}
@@ -53,7 +53,7 @@ public class Module implements KeyIdentifier<String> {
 		return this;
 	}
 	
-	public Module removeSubModule(Module module) {
+	Module removeSubModule(Module module) {
 		if (null == this.subModules || null == module) {
 			return this;
 		}
@@ -63,14 +63,14 @@ public class Module implements KeyIdentifier<String> {
 		return this;
 	}
 	
-	public boolean clearSubModules() {
+	boolean clearSubModules() {
 		if (this.hasSubModules()) {
 			this.subModules.clear();
 		}
 		return true;
 	}
 	
-	public boolean hasCommands() {
+	boolean hasCommands() {
 		return null != this.commands;
 	}
 	
@@ -81,18 +81,18 @@ public class Module implements KeyIdentifier<String> {
 		return this.commands.get(name);
 	}
 	
-	public Module addCommand(String name, Command module) {
+	Module addCommand(String name, Command command) {
 		if (StringUtils.isEmpty(name)) {
 			return this;
 		}
 		if (null == this.commands) {
 			this.commands = new HashMap<>();
 		}
-		this.commands.put(name, module);
+		this.commands.put(name, command);
 		return this;
 	}
 	
-	public Module removeCommand(String name) {
+	Module removeCommand(String name) {
 		if (null == this.commands || StringUtils.isEmpty(name)) {
 			return this;
 		}
@@ -102,7 +102,7 @@ public class Module implements KeyIdentifier<String> {
 		return this;
 	}
 
-	public boolean clearCommands() {
+	boolean clearCommands() {
 		if (this.hasCommands()) {
 			this.commands.clear();
 		}

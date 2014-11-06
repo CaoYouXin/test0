@@ -1,7 +1,7 @@
 package argsboot.loader;
 
 import argsboot.Loader;
-import argsboot.RuntimeHelper;
+import argsboot.StaticsHelper;
 import utils.Debugger;
 import utils.EnumerationUtils;
 
@@ -19,16 +19,15 @@ import java.util.jar.JarFile;
 public class DefaultLoader implements Loader {
 
 	@Override
-	public boolean load(Set<String> paths, String[] chain, RuntimeHelper runtimeHelper) {
+	public boolean load(Set<String> paths, String[] chain, StaticsHelper staticsHelper) {
 		paths.forEach((String more) -> {
 			String[] split = more.split("/");
 			Path path = Paths.get(split[0], (split.length < 2) ? new String[0] : Arrays.copyOfRange(split, 1, split.length));
             Debugger.debug(() -> System.out.println("now finding:" + path.toAbsolutePath().toString()));
 			try {
 				Files.find(path, Integer.MAX_VALUE, (Path t, BasicFileAttributes u) -> {
-					if (u.isDirectory()) return false;
-					return true;
-				}).forEach((p) -> {
+                    return !u.isDirectory();
+                }).forEach((p) -> {
                     String pAbsFullPathName = p.toAbsolutePath().toString();
                     Debugger.debug(() -> System.out.println("iterator:" + pAbsFullPathName));
                     if (pAbsFullPathName.endsWith("class")) {
@@ -42,7 +41,7 @@ public class DefaultLoader implements Loader {
                         String filename = relative.getName(lastIndex).toString();
                         sb.append(filename.substring(0, filename.length() - 6));
                         Debugger.debug(() -> System.out.println(sb.toString()));
-                        processWithClassName(sb.toString(), chain, runtimeHelper);
+                        processWithClassName(sb.toString(), chain, staticsHelper);
                     } else if (pAbsFullPathName.endsWith("jar")) {
                         JarFile jar = null;
                         try {
@@ -65,7 +64,7 @@ public class DefaultLoader implements Loader {
 		return false;
 	}
 
-    private void processWithClassName(String className, String[] chain, RuntimeHelper runtimeHelper) {
+    private void processWithClassName(String className, String[] chain, StaticsHelper staticsHelper) {
 
     }
 

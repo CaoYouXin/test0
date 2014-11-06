@@ -75,7 +75,7 @@ public class OneCall {
 	}
 	
 	String call() {
-		Module module = RuntimeHelper.val().getRootModuleByChain(moduleChain);
+		Module module = StaticsHelper.val().getModuleByChain(moduleChain);
 		if (null == module) {
 			throw new NullModuleException();
 		}

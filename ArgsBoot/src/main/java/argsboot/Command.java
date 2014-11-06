@@ -8,16 +8,22 @@ import java.util.Map;
 public class Command {
 
 	private CommandHandler handler;
-	private Map<String, Config> cfgs;
+	private Map<String, Config> configs;
 	
-	Command() {
+	Command(CommandHandler handler) {
+        this.handler = handler;
 	}
-	
+
+    Command setHandler(CommandHandler handler) {
+        this.handler = handler;
+        return this;
+    }
+
 	Command addCfg(String name, Config cfg) {
-		if (null == this.cfgs) {
-			this.cfgs = new HashMap<>();
+		if (null == this.configs) {
+			this.configs = new HashMap<>();
 		} 
-		this.cfgs.put(name, cfg);
+		this.configs.put(name, cfg);
 		return this;
 	}
 	
@@ -32,7 +38,7 @@ public class Command {
 		
 		int index = 0;
 		for (String cfg : configs) {
-			Config config = this.cfgs.get(cfg);
+			Config config = this.configs.get(cfg);
 			if (null == config) {
 				System.err.println(String.format("lack of config, %s", cfg));
 			}

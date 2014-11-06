@@ -4,7 +4,6 @@ import utils.ArrayUtils;
 import utils.Debugger;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 public class ArgsBoot {
@@ -18,9 +17,9 @@ public class ArgsBoot {
 	/**
 	 * 命令行启动时调用
 	 * @param args
-	 * @throws ClassNotFoundException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
 	 * @ifloader
 	 * start a command tool
 	 * @else
@@ -40,9 +39,9 @@ public class ArgsBoot {
 			return;
 		} else {
 			if ("default".equalsIgnoreCase(args[0])) {
-				LOADER = (Loader) Class.forName("argsboot.loader.DefaultLoader").newInstance();
+				setLoader((Loader) Class.forName("argsboot.loader.DefaultLoader").newInstance());
 			} else {
-				LOADER = (Loader) Class.forName(args[0]).newInstance();
+				setLoader((Loader) Class.forName(args[0]).newInstance());
 			}
 			load(ArrayUtils.asSet(args[2]));
 		}
@@ -76,9 +75,10 @@ public class ArgsBoot {
 	 * @param handler
 	 * @return
 	 */
-	public static <R> R call(List<String> args, CompletedHandler<R> handler) {
-		OneCall theCall = new OneCall(args);
-		String result = theCall.call();
+	public static <R> R call(CompletedHandler<R> handler, String... args) {
+		OneCall theCall = new OneCall(Arrays.asList(args));
+//		String result = theCall.call();
+        String result = "aaa";
 		if (null != handler) {
 			return handler.fn(result);
 		} else {
@@ -96,7 +96,7 @@ public class ArgsBoot {
 	 * @return 加载过程是否完成
 	 */
 	public static boolean load(Loader loader, Set<String> paths, String... moduleChain) {
-		return loader.load(paths, moduleChain, RuntimeHelper.val()) ? updatePathsCache(paths, moduleChain) : false;
+		return loader.load(paths, moduleChain, StaticsHelper.val()) ? updatePathsCache(paths, moduleChain) : false;
 	}
 	
 	public static boolean load(Set<String> paths, String... moduleChain) {
@@ -104,7 +104,7 @@ public class ArgsBoot {
 	}
 	
 	private static boolean updatePathsCache(Set<String> paths, String[] moduleChain) {
-		RuntimeHelper.val().getRootModuleByChain(Arrays.asList(moduleChain)).updatePaths(paths);
+		StaticsHelper.val().getModuleByChain(Arrays.asList(moduleChain)).updatePaths(paths);
 		return false;
 	}
 
@@ -115,8 +115,8 @@ public class ArgsBoot {
 	 * @return 加载过程是否完成
 	 */
 	public static boolean reload(Loader loader, String... moduleChain) {
-		Module module = RuntimeHelper.val().getRootModuleByChain(Arrays.asList(moduleChain));
-		return loader.isReloadSupported() ? loader.load(module.getPaths(), moduleChain, RuntimeHelper.val()) : false;
+		Module module = StaticsHelper.val().getModuleByChain(Arrays.asList(moduleChain));
+		return loader.isReloadSupported() ? loader.load(module.getPaths(), moduleChain, StaticsHelper.val()) : false;
 	}
 	
 	public static boolean reload(String... moduleChain) {
