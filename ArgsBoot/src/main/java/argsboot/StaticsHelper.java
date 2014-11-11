@@ -60,4 +60,11 @@ public class StaticsHelper {
         return command.setHandler(handler);
     }
 
+	public Module getModuleByChainCreateIfNull(List<String> chain) {
+		Module moduleByChain = this.getModuleByChain(chain);
+		if (null == moduleByChain) {
+			moduleByChain = this.createModuleChain(chain);
+		}
+		return moduleByChain;
+	}
 }

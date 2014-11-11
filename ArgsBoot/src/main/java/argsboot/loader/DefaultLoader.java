@@ -14,7 +14,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -29,9 +31,7 @@ public class DefaultLoader implements Loader {
 			Path path = Paths.get(split[0], (split.length < 2) ? new String[0] : Arrays.copyOfRange(split, 1, split.length));
             Debugger.debug(() -> System.out.println("now finding:" + path.toAbsolutePath().toString()));
 			try {
-				Files.find(path, Integer.MAX_VALUE, (Path t, BasicFileAttributes u) -> {
-                    return !u.isDirectory();
-                }).forEach((p) -> {
+				Files.find(path, Integer.MAX_VALUE, (Path t, BasicFileAttributes u) -> !u.isDirectory()).forEach((p) -> {
                     String pAbsFullPathName = p.toAbsolutePath().toString();
                     Debugger.debug(() -> System.out.println("iterator:" + pAbsFullPathName));
                     if (pAbsFullPathName.endsWith("class")) {
@@ -73,56 +73,27 @@ public class DefaultLoader implements Loader {
 	}
 
     private void processWithClassName(String className, String prefix, TmpStatics tmpStatics) {
-        Class clazz = null;
-        Field id = null;
+        Class clazz;
+        Field id;
         try {
             clazz = Class.forName(className);
             id = clazz.getField("ID");
-        } catch (NoSuchFieldException e) {
+        } catch (NoSuchFieldException | ClassNotFoundException e) {
             e.printStackTrace();
-            return;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            // TODO Log
             return;
         }
-        String identification = (null != id) ? id.getName() : "-1";
+        String identification = id.getName();
         if (!identification.startsWith(prefix)) return;
         int from = identification.indexOf(':');
         String chain = identification.substring(0, from);
-        if (clazz.isAssignableFrom(CommandHandler.class)) {
+        if (CommandHandler.class.isAssignableFrom(clazz)) {
             String cmdName = identification.substring(from + 1);
-            CommandHandler commandHandler = null;
-            try {
-                commandHandler = (CommandHandler) clazz.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-                // TODO Log
-                return;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                // TODO Log
-                return;
-            }
-            tmpStatics.add(chain, cmdName, commandHandler);
-        }
-        if (clazz.isAssignableFrom(ConfigHandler.class)) {
+            tmpStatics.add(chain, cmdName, clazz);
+        } else if (ConfigHandler.class.isAssignableFrom(clazz)) {
             int to = identification.indexOf(':', from);
             String cmdName = identification.substring(from + 1, to);
             String cfgName = identification.substring(to + 1);
-            ConfigHandler configHandler = null;
-            try {
-                configHandler = (ConfigHandler) clazz.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-                // TODO Log
-                return;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                // TODO Log
-                return;
-            }
-            tmpStatics.add(chain, cmdName, cfgName, configHandler);
+            tmpStatics.add(chain, cmdName, cfgName, clazz);
         }
     }
 
