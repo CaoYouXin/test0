@@ -37,5 +37,9 @@ public final class Suc {
 	public Object fail(NullParamFn<? extends Object> fn) {
 		return !this.suc ? fn.fn() : null;
 	}
-	
+
+    public void successAndUpdate(NullParamFn<? extends Boolean> fn) {
+        this.val(this.suc ? fn.fn() : false);
+    }
+
 }

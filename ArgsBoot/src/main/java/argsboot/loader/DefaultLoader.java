@@ -1,9 +1,6 @@
 package argsboot.loader;
 
-import argsboot.CommandHandler;
-import argsboot.ConfigHandler;
-import argsboot.Loader;
-import argsboot.StaticsHelper;
+import argsboot.*;
 import utils.Debugger;
 import utils.EnumerationUtils;
 import utils.StringUtils;
@@ -24,6 +21,11 @@ public class DefaultLoader implements Loader {
 
     @Override
 	public boolean load(Set<String> paths, String[] chain, StaticsHelper staticsHelper) {
+        boolean suc = staticsHelper.clearModule(chain);
+        if (!suc) {
+            return false;
+        }
+
         String prefix = StringUtils.join(chain, ".");
         TmpStatics tmp = new TmpStatics();
         paths.forEach((String more) -> {

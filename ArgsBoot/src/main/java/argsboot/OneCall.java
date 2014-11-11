@@ -75,25 +75,43 @@ public class OneCall {
 	}
 	
 	String call() {
-		Module module = StaticsHelper.val().getModuleByChain(moduleChain);
+		Module module = StaticsHelper.val().getModuleByChain(this.moduleChain);
 		if (null == module) {
 			throw new NullModuleException();
 		}
 		
-		Command command = module.getCommand(commandName);
+		Command command = module.getCommand(this.commandName);
 		if (null == command) {
 			throw new NullCommandException();
 		}
 		
-		return command.cmd(configNames, configParams, commandParams);
+		return command.cmd(this.getConfigNames(), this.getConfigParams(), this.getCommandParams());
 	}
 
-	@Override
+    private List<String> getCommandParams() {
+        if (null == this.commandParams)
+            return new ArrayList<>();
+        return this.commandParams;
+    }
+
+    private List<List<String>> getConfigParams() {
+        if (null == this.configParams)
+            return new ArrayList<>();
+        return this.configParams;
+    }
+
+    private List<String> getConfigNames() {
+        if (null == this.configNames)
+            return new ArrayList<>();
+        return this.configNames;
+    }
+
+    @Override
 	public String toString() {
-		return "OneCall [moduleChain=" + moduleChain + ", commandName="
-				+ commandName + ", configNames=" + configNames
-				+ ", configParams=" + configParams + ", commandParams="
-				+ commandParams + "]";
+		return "OneCall [moduleChain=" + this.moduleChain + ", commandName="
+				+ this.commandName + ", configNames=" + this.getConfigNames()
+				+ ", configParams=" + this.getConfigParams() + ", commandParams="
+				+ this.getCommandParams() + "]";
 	}
 
 }

@@ -1,6 +1,10 @@
 package argsboot;
 
+import utils.Suc;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RuntimeData
 public class StaticsHelper {
@@ -60,11 +64,54 @@ public class StaticsHelper {
         return command.setHandler(handler);
     }
 
-	public Module getModuleByChainCreateIfNull(List<String> chain) {
-		Module moduleByChain = this.getModuleByChain(chain);
-		if (null == moduleByChain) {
-			moduleByChain = this.createModuleChain(chain);
-		}
-		return moduleByChain;
-	}
+
+    public boolean batchAddCommand(String chain, Map<String, Class> stringClassMap) {
+        List<String> chainList = Arrays.asList(chain.split("."));
+        Module moduleByChain = this.getModuleByChain(chainList);
+        if (null == moduleByChain) {
+            moduleByChain = this.createModuleChain(chainList);
+        }
+        for (Map.Entry<String, Class> entry : stringClassMap.entrySet()) {
+            try {
+                moduleByChain.addCommand(entry.getKey(), new Command((CommandHandler) entry.getValue().newInstance()));
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean batchAddConfig(String key, Map<String, Class> stringClassMap) {
+        int index = key.indexOf(':');
+        String chain = key.substring(0, index);
+        String cmdName = key.substring(index + 1);
+
+        List<String> chainList = Arrays.asList(chain.split("."));
+        Module moduleByChain = this.getModuleByChain(chainList);
+        if (null == moduleByChain) {
+            return false;
+        }
+        Command command = moduleByChain.getCommand(cmdName);
+
+        for (Map.Entry<String, Class> entry : stringClassMap.entrySet()) {
+            try {
+                command.addCfg(entry.getKey(), new Config((ConfigHandler<?>) entry.getValue().newInstance()));
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean clearModule(String[] chain) {
+        Suc suc = new Suc();
+        Module moduleByChain = this.getModuleByChain(Arrays.asList(chain));
+        if (null != moduleByChain) {
+            suc.val(moduleByChain.clearCommands());
+            suc.val(moduleByChain.clearSubModules());
+        }
+        return suc.val();
+    }
 }

@@ -1,6 +1,7 @@
 package argsboot.loader;
 
 import argsboot.StaticsHelper;
+import utils.Suc;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.Map;
 public class TmpStatics {
 
     private Map<String, Map<String, Class>> cmds = new HashMap<>();
-    private Map<String, Map<String, Map<String, Class>>> cfgs = new HashMap<>();
+    private Map<String, Map<String, Class>> cfgs = new HashMap<>();
 
     public void add(String chain, String cmdName, Class commandHandler) {
         Map<String, Class> stringClassMap = cmds.get(chain);
@@ -25,25 +26,32 @@ public class TmpStatics {
     }
 
     public void add(String chain, String cmdName, String cfgName, Class configHandler) {
-        Map<String, Map<String, Class>> stringMapMap = cfgs.get(chain);
-        if (null == stringMapMap) {
-            stringMapMap = new HashMap<>();
-            cfgs.put(chain, stringMapMap);
-        }
-        Map<String, Class> stringClassMap = stringMapMap.get(cmdName);
+        String key = chain + ':' + cmdName;
+        Map<String, Class> stringClassMap = cfgs.get(key);
         if (null == stringClassMap) {
             stringClassMap = new HashMap<>();
-            stringMapMap.put(cmdName, stringClassMap);
+            cfgs.put(key, stringClassMap);
         }
         Class aClass = stringClassMap.get(cfgName);
         if (null == aClass) stringClassMap.put(cfgName, configHandler);
     }
 
     public boolean toReal(StaticsHelper staticsHelper) {
+        Suc suc = new Suc();
         cmds.forEach((chain, stringClassMap) -> {
-            staticsHelper.getModuleByChainCreateIfNull(Arrays.asList(chain.split(".")));
+            suc.successAndUpdate(() -> {
+                return staticsHelper.batchAddCommand(chain, stringClassMap);
+            });
         });
-        return false;
+        suc.success(() -> {
+            cfgs.forEach((key, stringClassMap) -> {
+                suc.successAndUpdate(() -> {
+                    return staticsHelper.batchAddConfig(key, stringClassMap);
+                });
+            });
+            return null;
+        });
+        return suc.val();
     }
 
 }
