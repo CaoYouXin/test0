@@ -10,18 +10,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * Class   to   handle   CLASSPATH   construction
  */
 public class ClassPath {
 
-    Vector _elements = new Vector();
-
-    public ClassPath() {
-    }
+    Set<File> _elements = new HashSet<>();
 
     public ClassPath(String initial) {
         addClasspath(initial);
@@ -72,25 +70,23 @@ public class ClassPath {
     }
 
     public String toString() {
-        StringBuffer cp = new StringBuffer(1024);
-        int cnt = _elements.size();
-        if (cnt >= 1) {
-            cp.append(((File) (_elements.elementAt(0))).getPath());
-        }
-        for (int i = 1; i < cnt; i++) {
-            cp.append(File.pathSeparatorChar);
-            cp.append(((File) (_elements.elementAt(i))).getPath());
-        }
-        return cp.toString();
+        StringBuffer sb = new StringBuffer(1024);
+        _elements.forEach((file) -> {
+            sb.append(File.pathSeparator);
+            sb.append(file.getPath());
+        });
+        return sb.substring(File.pathSeparator.length());
     }
 
     public URL[] getUrls() {
-        int cnt = _elements.size();
-        URL[] urls = new URL[cnt];
-        for (int i = 0; i < cnt; i++) {
+        URL[] urls = new URL[_elements.size()];
+        int index = 0;
+        for (File file : _elements) {
             try {
-                urls[i] = ((File) (_elements.elementAt(i))).toURI().toURL();
+                urls[index++] = file.toURI().toURL();
             } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return new URL[0];
             }
         }
         return urls;
@@ -109,4 +105,5 @@ public class ClassPath {
         URLClassLoader urlClassLoader = new URLClassLoader(urls, parent);
         return urlClassLoader;
     }
+
 }
