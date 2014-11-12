@@ -1,5 +1,6 @@
 package argsboot;
 
+import utils.StringUtils;
 import utils.Suc;
 
 import java.util.Arrays;
@@ -21,7 +22,7 @@ public class StaticsHelper {
 	private Module root = new Module("");
 	
 	private Module getRootModule() {
-		return root;
+		return this.root;
 	}
 	
 	public Module getModuleByChain(List<String> chain) {
@@ -52,26 +53,14 @@ public class StaticsHelper {
         return moduleByChain.getCommand(cmd);
     }
 
-    public Command createCommandByChain(List<String> chain, String cmd, CommandHandler handler) {
-        Module moduleByChain = this.getModuleByChain(chain);
-        if (null == moduleByChain) {
-            moduleByChain = this.createModuleChain(chain);
-            Command command = new Command(handler);
-            moduleByChain.addCommand(cmd, command);
-            return command;
-        }
-        Command command = moduleByChain.getCommand(cmd);
-        return command.setHandler(handler);
-    }
-
-
     public boolean batchAddCommand(String chain, Map<String, Class> stringClassMap) {
-        List<String> chainList = Arrays.asList(chain.split("."));
+        List<String> chainList = Arrays.asList(StringUtils.split(chain, "."));
         Module moduleByChain = this.getModuleByChain(chainList);
         if (null == moduleByChain) {
             moduleByChain = this.createModuleChain(chainList);
         }
         for (Map.Entry<String, Class> entry : stringClassMap.entrySet()) {
+            System.out.println("NULL FOUND [entry.getValue()]: " + moduleByChain);
             try {
                 moduleByChain.addCommand(entry.getKey(), new Command((CommandHandler) entry.getValue().newInstance()));
             } catch (InstantiationException | IllegalAccessException e) {
@@ -87,12 +76,10 @@ public class StaticsHelper {
         String chain = key.substring(0, index);
         String cmdName = key.substring(index + 1);
 
-        List<String> chainList = Arrays.asList(chain.split("."));
-        Module moduleByChain = this.getModuleByChain(chainList);
-        if (null == moduleByChain) {
+        Command command = this.getCommandByChain(Arrays.asList(StringUtils.split(chain, ".")), cmdName);
+        if (null == command) {
             return false;
         }
-        Command command = moduleByChain.getCommand(cmdName);
 
         for (Map.Entry<String, Class> entry : stringClassMap.entrySet()) {
             try {
@@ -114,4 +101,9 @@ public class StaticsHelper {
         }
         return suc.val();
     }
+
+    public void print() {
+        System.out.println(this.root.toString());
+    }
+
 }

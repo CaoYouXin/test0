@@ -122,5 +122,12 @@ class Module implements KeyIdentifier<String> {
 		}
 		this.paths.addAll(paths);
 	}
-	
+
+    @Override
+    public String toString() {
+        return "Module{" +
+                "subModules=" + subModules +
+                ", commands=" + commands +
+                '}';
+    }
 }

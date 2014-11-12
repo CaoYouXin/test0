@@ -128,4 +128,11 @@ public class StringUtils {
         return String.format("\"%s\"", o);
     }
 
+    public static String[] split(String src, String reg) {
+        if (StringUtils.isEmpty(src)) {
+            return new String[0];
+        }
+        return src.split(reg);
+    }
+
 }

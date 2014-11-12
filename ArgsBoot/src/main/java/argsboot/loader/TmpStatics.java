@@ -37,7 +37,7 @@ public class TmpStatics {
     }
 
     public boolean toReal(StaticsHelper staticsHelper) {
-        Suc suc = new Suc();
+        Suc suc = new Suc(true);
         cmds.forEach((chain, stringClassMap) -> {
             suc.successAndUpdate(() -> {
                 return staticsHelper.batchAddCommand(chain, stringClassMap);

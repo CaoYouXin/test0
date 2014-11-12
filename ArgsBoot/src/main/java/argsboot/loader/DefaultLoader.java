@@ -21,6 +21,12 @@ public class DefaultLoader implements Loader {
 
     @Override
 	public boolean load(Set<String> paths, String[] chain, StaticsHelper staticsHelper) {
+        Debugger.debug(() -> {
+            System.out.println("boot: " + System.getProperty("sun.boot.class.path"));
+            System.out.println("ext : " + System.getProperty("java.ext.dirs"));
+            System.out.println("cp  : " + System.getProperty("java.class.path"));
+        });
+
         boolean suc = staticsHelper.clearModule(chain);
         if (!suc) {
             return false;
@@ -30,9 +36,17 @@ public class DefaultLoader implements Loader {
         TmpStatics tmp = new TmpStatics();
         paths.forEach((String more) -> {
 			String[] split = more.split("/");
-			Path path = Paths.get(split[0], (split.length < 2) ? new String[0] : Arrays.copyOfRange(split, 1, split.length));
-            Debugger.debug(() -> System.out.println("now finding:" + path.toAbsolutePath().toString()));
-			try {
+            Path path = Paths.get(split[0], (split.length < 2) ? new String[0] : Arrays.copyOfRange(split, 1, split.length));
+            String fullPath = path.toAbsolutePath().toString();
+            Debugger.debug(() -> {
+                System.out.println("now finding:" + fullPath);
+            });
+            ClassPath classPath = new ClassPath(System.getProperty("java.class.path"));
+            classPath.addClasspath(fullPath);
+            System.setProperty("java.class.path", classPath.toString());
+            System.out.println("cp cp: " + System.getProperty("java.class.path"));
+            ClassLoader classloader = classPath.getClassLoader();
+            try {
 				Files.find(path, Integer.MAX_VALUE, (Path t, BasicFileAttributes u) -> !u.isDirectory()).forEach((p) -> {
                     String pAbsFullPathName = p.toAbsolutePath().toString();
                     Debugger.debug(() -> System.out.println("iterator:" + pAbsFullPathName));
@@ -47,7 +61,7 @@ public class DefaultLoader implements Loader {
                         String filename = relative.getName(lastIndex).toString();
                         sb.append(filename.substring(0, filename.length() - 6));
                         Debugger.debug(() -> System.out.println(sb.toString()));
-                        processWithClassName(sb.toString(), prefix, tmp);
+                        processWithClassName(classloader, sb.toString(), prefix, tmp);
                     } else if (pAbsFullPathName.endsWith("jar")) {
                         JarFile jar = null;
                         try {
@@ -62,7 +76,7 @@ public class DefaultLoader implements Loader {
                             if (jarEntry.getName().endsWith("class")) {
                                 String className = jarEntry.getName().replace('/', '.');
                                 className = className.substring(0, className.length() - 6);
-                                processWithClassName(className, prefix, tmp);
+                                processWithClassName(classloader, className, prefix, tmp);
                             }
                         }
                     }
@@ -71,20 +85,27 @@ public class DefaultLoader implements Loader {
 				e.printStackTrace();
 			}
         });
-		return tmp.toReal(staticsHelper);
+        if (tmp.toReal(staticsHelper)) {
+            staticsHelper.print();
+            return true;
+        }
+        Debugger.debug(() -> {
+            System.err.println("ro real failed.");
+        });
+		return false;
 	}
 
-    private void processWithClassName(String className, String prefix, TmpStatics tmpStatics) {
+    private void processWithClassName(ClassLoader classloader, String className, String prefix, TmpStatics tmpStatics) {
         Class clazz;
-        Field id;
+        String identification = null;
         try {
-            clazz = Class.forName(className);
-            id = clazz.getField("ID");
-        } catch (NoSuchFieldException | ClassNotFoundException e) {
+            clazz = classloader.loadClass(className);
+            Field id = clazz.getField("ID");
+            identification = (String) id.get(clazz);
+        } catch (NoSuchFieldException | ClassNotFoundException | IllegalAccessException e) {
             e.printStackTrace();
             return;
         }
-        String identification = id.getName();
         if (!identification.startsWith(prefix)) return;
         int from = identification.indexOf(':');
         String chain = identification.substring(0, from);
@@ -92,7 +113,7 @@ public class DefaultLoader implements Loader {
             String cmdName = identification.substring(from + 1);
             tmpStatics.add(chain, cmdName, clazz);
         } else if (ConfigHandler.class.isAssignableFrom(clazz)) {
-            int to = identification.indexOf(':', from);
+            int to = identification.indexOf(':', from + 1);
             String cmdName = identification.substring(from + 1, to);
             String cfgName = identification.substring(to + 1);
             tmpStatics.add(chain, cmdName, cfgName, clazz);

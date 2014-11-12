@@ -11,6 +11,9 @@ class Command {
 	private Map<String, Config> configs;
 	
 	Command(CommandHandler handler) {
+        if (null == handler) {
+            throw new RuntimeException("command handler is null.");
+        }
         this.handler = handler;
 	}
 
@@ -47,5 +50,11 @@ class Command {
 		
 		return this.handler.fn(params);
 	}
-	
+
+    @Override
+    public String toString() {
+        return "Command{" +
+                "configs=" + configs +
+                '}';
+    }
 }
