@@ -77,8 +77,7 @@ public class ArgsBoot {
 	 */
 	public static <R> R call(CompletedHandler<R> handler, String... args) {
 		OneCall theCall = new OneCall(Arrays.asList(args));
-//		String result = theCall.call();
-        String result = "aaa";
+		String result = theCall.call();
 		if (null != handler) {
 			return handler.fn(result);
 		} else {
