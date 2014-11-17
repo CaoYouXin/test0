@@ -27,11 +27,18 @@ public class LoaderTester {
 //        System.out.println(split.length);
 //        System.out.println(StaticsHelper.val().createModuleChain(Arrays.asList(split)));
 
-        Set<Integer> set = new HashSet<>();
-        set.add(1);
-        set.add(2);
-        set.add(1);
-        System.out.println(set);
+//        Set<Integer> set = new HashSet<>();
+//        set.add(1);
+//        set.add(2);
+//        set.add(1);
+//        System.out.println(set);
+
+
+        int i = 0;
+        System.out.println(i);
+
+
+
     }
 
 }
