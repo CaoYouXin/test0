@@ -27,11 +27,6 @@ public class DefaultLoader implements Loader {
             System.out.println("cp  : " + System.getProperty("java.class.path"));
         });
 
-        boolean suc = staticsHelper.clearModule(chain);
-        if (!suc) {
-            return false;
-        }
-
         String prefix = StringUtils.join(chain, ".");
         TmpStatics tmp = new TmpStatics();
         paths.forEach((String more) -> {
@@ -95,6 +90,11 @@ public class DefaultLoader implements Loader {
 		return false;
 	}
 
+    @Override
+    public boolean clear(String[] chain, StaticsHelper staticsHelper) {
+        return staticsHelper.clearModule(chain);
+    }
+
     private void processWithClassName(ClassLoader classloader, String className, String prefix, TmpStatics tmpStatics) {
         Class clazz;
         String identification = null;
@@ -124,5 +124,10 @@ public class DefaultLoader implements Loader {
 	public boolean isReloadSupported() {
 		return false;
 	}
+
+    @Override
+    public boolean isDistributedSupported() {
+        return false;
+    }
 
 }
